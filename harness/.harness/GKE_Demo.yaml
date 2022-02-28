@@ -147,6 +147,13 @@ pipeline:
                                                             ports:
                                                             - containerPort: {{.Values.port}}" > app.yaml
                                                     cat app.yaml
+                                                    echo "Generando archivo YAML de values..."
+                                                    echo "
+                                                    name: harness-example
+                                                    replicas: 1
+
+                                                    image: <+artifact.image>
+                                                    port: 8080" > values.yaml
                                                     fi 
                                                     echo $salida
                                                     export language=$salida
