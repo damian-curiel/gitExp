@@ -107,12 +107,12 @@ pipeline:
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: bash:devel-alpine3.15
-                                                command: |+
+                                                command: |-
                                                     #!/bin/bash
 
                                                     salida="false"
 
-                                                    count=`ls -1 *.jar 2>/dev/null | wc -l`
+                                                    count=`ls -1 *.java 2>/dev/null | wc -l`
                                                     if [ $count != 0 ]
                                                     then 
                                                     salida="true"
@@ -120,8 +120,9 @@ pipeline:
                                                     fi 
                                                     echo $salida
 
+                                                    export language=$salida
                                                 outputVariables:
-                                                    - name: salida
+                                                    - name: language
                                                 shell: Bash
                                       - step:
                                             type: Run
