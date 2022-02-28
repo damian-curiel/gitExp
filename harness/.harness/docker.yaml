@@ -52,5 +52,4 @@ pipeline:
                                     repo: fcuriel/pacifico
                                     tags:
                                         - <+pipeline.sequenceId>
-                                    dockerfile: /harness/GKE_demo_latam/
                                     context: /harness/GKE_demo_latam/
