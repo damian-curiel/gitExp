@@ -167,7 +167,7 @@ pipeline:
                                           image: maven:3-openjdk-8
                                           command: |-
                                               echo "Listing Directory and files"
-                                              #cd dubbo-samples-api
+                                              cd GKE_demo_latam
                                               pwd
                                               ls -ltra
 
