@@ -166,6 +166,24 @@ pipeline:
                     when:
                         pipelineStatus: Success
                         condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "appengine"
+              - stage:
+                    name: Build GCS
+                    identifier: Build_GCS
+                    type: CI
+                    spec:
+                        cloneCodebase: true
+                        infrastructure:
+                            useFromStage: Technology
+                        execution:
+                            steps:
+                                - step:
+                                      type: Run
+                                      name: Upload to GCS
+                                      identifier: Upload_to_GCS
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: google/cloud-sdk:latest
+                                          command: echo "Cargando proyecto a bucket..."
         - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
