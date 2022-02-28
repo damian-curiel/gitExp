@@ -127,14 +127,39 @@ pipeline:
                             useFromStage: Technology
                         execution:
                             steps:
-                                - step:
-                                      type: Run
-                                      name: isJava
-                                      identifier: isJava
-                                      spec:
-                                          connectorRef: account.DockerDC
-                                          image: nginx:alpine
-                                          command: echo "es Java"
+                                - parallel:
+                                      - step:
+                                            type: Run
+                                            name: isPython
+                                            identifier: test
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "test"
+                                      - step:
+                                            type: Run
+                                            name: isJava8
+                                            identifier: isJava
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "es Java"
+                                      - step:
+                                            type: Run
+                                            name: isAngular
+                                            identifier: isNodeJS
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "Es Angular"
+                                      - step:
+                                            type: Run
+                                            name: isReact
+                                            identifier: isGo
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "es React"
         - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
