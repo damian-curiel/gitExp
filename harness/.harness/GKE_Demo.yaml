@@ -117,6 +117,9 @@ pipeline:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
                                                 command: echo "Es Java 11"
+                    when:
+                        pipelineStatus: Success
+                        condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GKE"
               - stage:
                     name: Build AppEngine
                     identifier: Build_AppEngine
@@ -160,6 +163,9 @@ pipeline:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
                                                 command: echo "es Node JS"
+                    when:
+                        pipelineStatus: Success
+                        condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "appengine"
         - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
