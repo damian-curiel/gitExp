@@ -94,6 +94,8 @@ pipeline:
 
 
                                               git clone https://github.com/damian-curiel/GKE_demo_latam.git
+                                              cd GKE_demo_latam
+
 
                                               echo "Proyecto descargado:"
                                               pwd
