@@ -115,9 +115,12 @@ pipeline:
                                             identifier: isJava
                                             spec:
                                                 connectorRef: account.DockerDC
-                                                image: bash:devel-alpine3.15
+                                                image: bash:4.0.44
                                                 command: |-
                                                     #!/bin/bash
+                                                    pwd
+                                                    ls
+                                                    cd GKE_demo_latam
                                                     salida="false"
                                                     count=`ls -1 *.java 2>/dev/null | wc -l`
                                                     if [ $count != 0 ]
