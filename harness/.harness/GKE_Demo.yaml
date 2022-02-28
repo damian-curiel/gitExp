@@ -71,7 +71,7 @@ pipeline:
                     identifier: Build_Kubernetes
                     type: CI
                     spec:
-                        cloneCodebase: true
+                        cloneCodebase: false
                         infrastructure:
                             useFromStage: Technology
                         execution:
