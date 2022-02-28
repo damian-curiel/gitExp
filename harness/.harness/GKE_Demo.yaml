@@ -189,7 +189,7 @@ pipeline:
                                           repo: fcuriel/latam
                                           tags:
                                               - GKE-<+pipeline.sequenceId>
-                                          context: /GKE_demo_latam
+                                          context: /harness/GKE_demo_latam/
                                       failureStrategies: []
                     when:
                         pipelineStatus: Success
