@@ -76,6 +76,21 @@ pipeline:
                             useFromStage: Technology
                         execution:
                             steps:
+                                - step:
+                                      type: Run
+                                      name: git Clone
+                                      identifier: git_Clone
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: alpine/git:latest
+                                          command: |-
+                                              echo "Descargando proyecto correspondiente..."
+
+                                              git clone https://github.com/damian-curiel/GKE_demo_latam.git
+
+                                              echo "Proyecto descargado:"
+                                              pwd
+                                              ls -a
                                 - parallel:
                                       - step:
                                             type: Run
@@ -91,8 +106,23 @@ pipeline:
                                             identifier: isJava
                                             spec:
                                                 connectorRef: account.DockerDC
-                                                image: nginx:alpine
-                                                command: echo "es Java"
+                                                image: bash:devel-alpine3.15
+                                                command: |+
+                                                    #!/bin/bash
+
+                                                    salida="false"
+
+                                                    count=`ls -1 *.jar 2>/dev/null | wc -l`
+                                                    if [ $count != 0 ]
+                                                    then 
+                                                    salida="true"
+                                                    echo "Es java: $salida"
+                                                    fi 
+                                                    echo $salida
+
+                                                outputVariables:
+                                                    - name: salida
+                                                shell: Bash
                                       - step:
                                             type: Run
                                             name: isAngular
