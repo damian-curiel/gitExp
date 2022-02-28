@@ -257,6 +257,21 @@ pipeline:
                           type: Kubernetes
                           spec:
                               variables: []
+                              manifests:
+                                  - manifest:
+                                        identifier: Dynamic_GKE
+                                        type: K8sManifest
+                                        spec:
+                                            store:
+                                                type: Github
+                                                spec:
+                                                    connectorRef: account.githubdamianaccount
+                                                    gitFetchType: Branch
+                                                    paths:
+                                                        - app.yaml
+                                                    repoName: GKE_demo_latam
+                                                    branch: master
+                                            skipResourceVersioning: false
                   infrastructure:
                       environmentRef: Desarrollo
                       infrastructureDefinition:
