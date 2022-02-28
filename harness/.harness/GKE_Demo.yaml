@@ -194,9 +194,11 @@ pipeline:
                                           command: |-
                                               echo "Uploading App.yaml generated..."
                                               cd GKE_demo_latam
-                                              git add --all
-                                              git commit -m "Add harness app.yaml file created"
-                                              git push https://github.com/damian-curiel/GKE_demo_latam.git
+                                              git add app.yaml
+                                              git add values.yaml
+                                              git status
+                                              git commit -m "Add harness app.yaml and values.yaml file auto-generated"
+                                              git push
                                 - step:
                                       type: Run
                                       name: Compile Java
