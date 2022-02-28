@@ -135,10 +135,10 @@ pipeline:
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
-                                                command: echo "test"
+                                                command: echo "Es Python"
                                       - step:
                                             type: Run
-                                            name: isJava8
+                                            name: isJava
                                             identifier: isJava
                                             spec:
                                                 connectorRef: account.DockerDC
@@ -146,20 +146,20 @@ pipeline:
                                                 command: echo "es Java"
                                       - step:
                                             type: Run
-                                            name: isAngular
+                                            name: isGo
                                             identifier: isNodeJS
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
-                                                command: echo "Es Angular"
+                                                command: echo "Es GO"
                                       - step:
                                             type: Run
-                                            name: isReact
+                                            name: isNodeJS
                                             identifier: isGo
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
-                                                command: echo "es React"
+                                                command: echo "es Node JS"
         - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
