@@ -117,6 +117,9 @@ pipeline:
                                                     then 
                                                     salida="true"
                                                     echo "Es java: $salida"
+                                                    echo "Generando archivo YAML de despliegue..."
+                                                    echo "runtime: java" > app.yaml
+                                                    cat app.yaml
                                                     fi 
                                                     echo $salida
 
