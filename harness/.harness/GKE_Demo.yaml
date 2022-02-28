@@ -184,6 +184,9 @@ pipeline:
                                           connectorRef: account.DockerDC
                                           image: google/cloud-sdk:latest
                                           command: echo "Cargando proyecto a bucket..."
+                    when:
+                        pipelineStatus: Success
+                        condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GCS"
         - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
