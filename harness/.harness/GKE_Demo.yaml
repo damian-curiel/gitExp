@@ -189,8 +189,8 @@ pipeline:
                                           repo: fcuriel/latam
                                           tags:
                                               - GKE-<+pipeline.sequenceId>
-                                          dockerfile: /GKE_demo_latam
                                           context: /GKE_demo_latam
+                                      failureStrategies: []
                     when:
                         pipelineStatus: Success
                         condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GKE"
