@@ -1,0 +1,167 @@
+pipeline:
+    name: GKE Demo
+    identifier: GKE_Demo
+    allowStageExecutions: false
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    tags: {}
+    properties:
+        ci:
+            codebase:
+                connectorRef: account.githubdamianaccount
+                repoName: demo_latam
+                build: <+input>
+    stages:
+        - stage:
+              name: Technology
+              identifier: Technology
+              type: CI
+              spec:
+                  cloneCodebase: true
+                  infrastructure:
+                      type: KubernetesDirect
+                      spec:
+                          connectorRef: account.LATAM_SE
+                          namespace: harness-delegate
+                  execution:
+                      steps:
+                          - step:
+                                type: Run
+                                name: Determine Technology from trigger
+                                identifier: Determine_Technology_from_trigger
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: bash:devel-alpine3.15
+                                    command: |-
+                                        echo "Detectando tecnología..."
+                                        echo "Propiedades de trigger:  "
+
+                                        echo "Repo de payload: <+trigger.payload.repository.name>"
+
+                                        echo "tipo: <+trigger.type>"
+                                        echo "Repo: <+trigger.sourceRepo>"
+                                        echo "Evento: <+trigger.event>"
+                                        echo "Rama destino: <+trigger.targetBranch>"
+                                        echo "Rama origen: <+trigger.sourceBranch>"
+                                        echo "PR #: <+trigger.prNumber>"
+                                        echo "PR Titulo: <+trigger.prTitle>"
+                                        echo "Usuario: <+trigger.gitUser>"
+                                        echo "URL repo: <+trigger.repoUrl>"
+                                        echo "commit sha: <+trigger.commitSha>"
+                                        echo "base commit sha: <+trigger.baseCommitSha>"
+
+
+                                        tech=<+trigger.payload.repository.name>
+                                        trim=${tech%%_*}
+                                        echo "trim: $trim"
+
+                                        export technology=${tech%%_*}
+
+                                        #echo "trim: $technology"
+
+                                        #<+pipeline.variables.technology>=$trim
+
+                                        #echo "<+trigger.payload.repository.name>"
+                                    outputVariables:
+                                        - name: technology
+                                    shell: Bash
+        - stage:
+              name: Build Kubernetes
+              identifier: Build_Kubernetes
+              type: CI
+              spec:
+                  cloneCodebase: true
+                  infrastructure:
+                      useFromStage: Technology
+                  execution:
+                      steps:
+                          - parallel:
+                                - step:
+                                      type: Run
+                                      name: isPython
+                                      identifier: test
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: nginx:alpine
+                                          command: echo "test"
+                                - step:
+                                      type: Run
+                                      name: isJava8
+                                      identifier: isJava
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: nginx:alpine
+                                          command: echo "es Java"
+                                - step:
+                                      type: Run
+                                      name: isAngular
+                                      identifier: isNodeJS
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: nginx:alpine
+                                          command: echo "Es Angular"
+                                - step:
+                                      type: Run
+                                      name: isReact
+                                      identifier: isGo
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: nginx:alpine
+                                          command: echo "es React"
+                                - step:
+                                      type: Run
+                                      name: isJava11
+                                      identifier: isRuby
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: nginx:alpine
+                                          command: echo "Es Java 11"
+        - stage:
+              name: Deploy Kubernetes
+              identifier: Deploy_Kubernetes
+              description: ""
+              type: Deployment
+              spec:
+                  serviceConfig:
+                      serviceRef: k8s_sample_app
+                      serviceDefinition:
+                          type: Kubernetes
+                          spec:
+                              variables: []
+                  infrastructure:
+                      environmentRef: Desarrollo
+                      infrastructureDefinition:
+                          type: KubernetesDirect
+                          spec:
+                              connectorRef: account.LATAM_SE
+                              namespace: harness-delegate
+                              releaseName: release-<+INFRA_KEY>
+                      allowSimultaneousDeployments: false
+                  execution:
+                      steps:
+                          - step:
+                                name: Rollout Deployment
+                                identifier: rolloutDeployment
+                                type: K8sRollingDeploy
+                                timeout: 10m
+                                spec:
+                                    skipDryRun: false
+                      rollbackSteps:
+                          - step:
+                                name: Rollback Rollout Deployment
+                                identifier: rollbackRolloutDeployment
+                                type: K8sRollingRollback
+                                timeout: 10m
+                                spec: {}
+                  serviceDependencies: []
+              tags: {}
+              failureStrategies:
+                  - onFailure:
+                        errors:
+                            - AllErrors
+                        action:
+                            type: StageRollback
+    variables:
+        - name: technology
+          type: String
+          value: ""
