@@ -148,6 +148,33 @@ pipeline:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
                                                 command: echo "Es Java 11"
+                                - step:
+                                      type: Run
+                                      name: Compile Java
+                                      identifier: Compile_Java
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: maven:3-openjdk-8
+                                          command: |-
+                                              echo "Listing Directory and files"
+                                              #cd dubbo-samples-api
+                                              pwd
+                                              ls -ltra
+
+                                              echo "Starting Build"
+
+                                              mvn -B -DskipTests clean package
+
+                                              echo "Build Finished"
+                                - step:
+                                      type: BuildAndPushDockerRegistry
+                                      name: Build and push image
+                                      identifier: Build_and_push_image
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          repo: fcuriel/latam
+                                          tags:
+                                              - GKE-<+pipeline.sequenceId>
                     when:
                         pipelineStatus: Success
                         condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GKE"
