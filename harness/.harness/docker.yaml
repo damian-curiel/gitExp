@@ -1,0 +1,29 @@
+pipeline:
+    name: docker
+    identifier: docker
+    allowStageExecutions: false
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    tags: {}
+    stages:
+        - stage:
+              name: test
+              identifier: test
+              type: CI
+              spec:
+                  cloneCodebase: false
+                  infrastructure:
+                      type: KubernetesDirect
+                      spec:
+                          connectorRef: account.LATAM_SE
+                          namespace: harness-delegate
+                  execution:
+                      steps:
+                          - step:
+                                type: Run
+                                name: git clone
+                                identifier: git_clone
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: git:4
+                                    command: echo "descargando repo:"
