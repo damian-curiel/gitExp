@@ -160,6 +160,19 @@ pipeline:
                                                 command: echo "Es Java 11"
                                 - step:
                                       type: Run
+                                      name: git commit yaml
+                                      identifier: git_commit_yaml
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: alpine/git:latest
+                                          command: |-
+                                              echo "Uploading App.yaml generated..."
+                                              cd GKE_demo_latam
+                                              git add --all
+                                              git commit -m "Add harness app.yaml file created"
+                                              git push https://github.com/damian-curiel/GKE_demo_latam.git
+                                - step:
+                                      type: Run
                                       name: Compile Java
                                       identifier: Compile_Java
                                       spec:
