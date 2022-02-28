@@ -86,7 +86,7 @@ pipeline:
                                           command: |-
                                               echo "Borrando temporales..."
 
-                                              rm -r /*
+                                              rm -r /harness/*
                                               pwd
                                               ls
 
