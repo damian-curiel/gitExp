@@ -65,57 +65,76 @@ pipeline:
                                     outputVariables:
                                         - name: technology
                                     shell: Bash
-        - stage:
-              name: Build Kubernetes
-              identifier: Build_Kubernetes
-              type: CI
-              spec:
-                  cloneCodebase: true
-                  infrastructure:
-                      useFromStage: Technology
-                  execution:
-                      steps:
-                          - parallel:
+        - parallel:
+              - stage:
+                    name: Build Kubernetes
+                    identifier: Build_Kubernetes
+                    type: CI
+                    spec:
+                        cloneCodebase: true
+                        infrastructure:
+                            useFromStage: Technology
+                        execution:
+                            steps:
+                                - parallel:
+                                      - step:
+                                            type: Run
+                                            name: isPython
+                                            identifier: test
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "test"
+                                      - step:
+                                            type: Run
+                                            name: isJava8
+                                            identifier: isJava
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "es Java"
+                                      - step:
+                                            type: Run
+                                            name: isAngular
+                                            identifier: isNodeJS
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "Es Angular"
+                                      - step:
+                                            type: Run
+                                            name: isReact
+                                            identifier: isGo
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "es React"
+                                      - step:
+                                            type: Run
+                                            name: isJava11
+                                            identifier: isRuby
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nginx:alpine
+                                                command: echo "Es Java 11"
+              - stage:
+                    name: Build AppEngine
+                    identifier: Build_AppEngine
+                    type: CI
+                    spec:
+                        cloneCodebase: true
+                        infrastructure:
+                            useFromStage: Technology
+                        execution:
+                            steps:
                                 - step:
                                       type: Run
-                                      name: isPython
-                                      identifier: test
-                                      spec:
-                                          connectorRef: account.DockerDC
-                                          image: nginx:alpine
-                                          command: echo "test"
-                                - step:
-                                      type: Run
-                                      name: isJava8
+                                      name: isJava
                                       identifier: isJava
                                       spec:
                                           connectorRef: account.DockerDC
                                           image: nginx:alpine
                                           command: echo "es Java"
-                                - step:
-                                      type: Run
-                                      name: isAngular
-                                      identifier: isNodeJS
-                                      spec:
-                                          connectorRef: account.DockerDC
-                                          image: nginx:alpine
-                                          command: echo "Es Angular"
-                                - step:
-                                      type: Run
-                                      name: isReact
-                                      identifier: isGo
-                                      spec:
-                                          connectorRef: account.DockerDC
-                                          image: nginx:alpine
-                                          command: echo "es React"
-                                - step:
-                                      type: Run
-                                      name: isJava11
-                                      identifier: isRuby
-                                      spec:
-                                          connectorRef: account.DockerDC
-                                          image: nginx:alpine
-                                          command: echo "Es Java 11"
         - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
