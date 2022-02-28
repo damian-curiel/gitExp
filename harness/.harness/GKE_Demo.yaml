@@ -84,7 +84,14 @@ pipeline:
                                           connectorRef: account.DockerDC
                                           image: alpine/git:latest
                                           command: |-
+                                              echo "Borrando temporales..."
+
+                                              rm -r /*
+                                              pwd
+                                              ls
+
                                               echo "Descargando proyecto correspondiente..."
+
 
                                               git clone https://github.com/damian-curiel/GKE_demo_latam.git
 
