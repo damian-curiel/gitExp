@@ -126,7 +126,26 @@ pipeline:
                                                     salida="java"
                                                     echo "Es java: $salida"
                                                     echo "Generando archivo YAML de despliegue..."
-                                                    echo "runtime: java" > app.yaml
+                                                    echo "apiVersion: apps/v1
+                                                    kind: Deployment
+                                                    metadata:
+                                                      name: pacifico-app
+                                                      labels:
+                                                        app: pacifico
+                                                    spec:
+                                                      selector:
+                                                        matchLabels:
+                                                          app: pacifico
+                                                      template:
+                                                        metadata:
+                                                          labels:
+                                                            app: pacifico
+                                                        spec:
+                                                          containers:
+                                                          - image: {{.Values.image}}
+                                                            name: pacifico
+                                                            ports:
+                                                            - containerPort: {{.Values.port}}" > app.yaml
                                                     cat app.yaml
                                                     fi 
                                                     echo $salida
