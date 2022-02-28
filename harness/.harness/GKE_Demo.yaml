@@ -9,7 +9,7 @@ pipeline:
         ci:
             codebase:
                 connectorRef: account.githubdamianaccount
-                repoName: GKE_demo_latam
+                repoName: base_latam
                 build: <+input>
     stages:
         - stage:
