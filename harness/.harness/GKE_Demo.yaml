@@ -118,8 +118,6 @@ pipeline:
                                                 image: bash:4.0.44
                                                 command: |-
                                                     #!/bin/bash
-                                                    pwd
-                                                    ls
                                                     cd GKE_demo_latam
                                                     salida="false"
                                                     count=`ls -1 *.java 2>/dev/null | wc -l`
@@ -191,6 +189,8 @@ pipeline:
                                           repo: fcuriel/latam
                                           tags:
                                               - GKE-<+pipeline.sequenceId>
+                                          dockerfile: /GKE_demo_latam/Dockerfile
+                                          context: /GKE_demo_latam
                     when:
                         pipelineStatus: Success
                         condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GKE"
