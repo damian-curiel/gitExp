@@ -321,6 +321,9 @@ pipeline:
                             - AllErrors
                         action:
                             type: StageRollback
+              when:
+                  pipelineStatus: Success
+                  condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GKE"
     variables:
         - name: technology
           type: String
