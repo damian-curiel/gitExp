@@ -25,5 +25,32 @@ pipeline:
                                 identifier: git_clone
                                 spec:
                                     connectorRef: account.DockerDC
-                                    image: git:4
-                                    command: echo "descargando repo:"
+                                    image: alpine/git:latest
+                                    command: |-
+                                        echo "Borrando temporales..."
+
+                                        #rm -r /harness/*
+                                        pwd
+                                        ls
+
+                                        echo "Descargando proyecto correspondiente..."
+
+
+                                        git clone https://github.com/damian-curiel/GKE_demo_latam.git
+                                        cd GKE_demo_latam
+
+
+                                        echo "Proyecto descargado:"
+                                        pwd
+                                        ls -a
+                          - step:
+                                type: BuildAndPushDockerRegistry
+                                name: push
+                                identifier: push
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    repo: fcuriel/pacifico
+                                    tags:
+                                        - <+pipeline.sequenceId>
+                                    dockerfile: /harness/GKE_demo_latam/
+                                    context: /harness/GKE_demo_latam/
