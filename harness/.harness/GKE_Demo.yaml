@@ -118,9 +118,7 @@ pipeline:
                                                 image: bash:devel-alpine3.15
                                                 command: |-
                                                     #!/bin/bash
-
                                                     salida="false"
-
                                                     count=`ls -1 *.java 2>/dev/null | wc -l`
                                                     if [ $count != 0 ]
                                                     then 
@@ -131,7 +129,6 @@ pipeline:
                                                     cat app.yaml
                                                     fi 
                                                     echo $salida
-
                                                     export language=$salida
                                                 outputVariables:
                                                     - name: language
