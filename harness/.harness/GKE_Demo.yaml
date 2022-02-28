@@ -115,7 +115,7 @@ pipeline:
                                                     count=`ls -1 *.java 2>/dev/null | wc -l`
                                                     if [ $count != 0 ]
                                                     then 
-                                                    salida="true"
+                                                    salida="java"
                                                     echo "Es java: $salida"
                                                     echo "Generando archivo YAML de despliegue..."
                                                     echo "runtime: java" > app.yaml
@@ -169,6 +169,10 @@ pipeline:
                                               mvn -B -DskipTests clean package
 
                                               echo "Build Finished"
+                                      when:
+                                          stageStatus: Success
+                                          condition: <+execution.steps.isJava.output.outputVariables.language> == "java"
+                                      failureStrategies: []
                                 - step:
                                       type: BuildAndPushDockerRegistry
                                       name: Build and push image
