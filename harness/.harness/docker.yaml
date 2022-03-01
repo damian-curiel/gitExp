@@ -101,5 +101,5 @@ pipeline:
                                         git add values.yaml
                                         git status
                                         git commit -m "Add harness app.yaml and values.yaml file auto-generated"
-                                        git remote set-url origin https://github.com/damian-curiel/GKE_demo_latam.git
+                                        git remote set-url origin https://damian-curiel:<+secrets.getValue("git_pwd")>@github.com/damian-curiel/GKE_demo_latam.git
                                         git push -u origin master
