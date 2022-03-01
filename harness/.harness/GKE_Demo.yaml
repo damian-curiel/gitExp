@@ -278,7 +278,7 @@ pipeline:
                                             identifier: Compile_Nodejs
                                             spec:
                                                 connectorRef: account.DockerDC
-                                                image: nodejs:2.7
+                                                image: python:alpine3.15
                                                 command: |-
                                                     echo "Iniciando compilación NodeJS"
 
@@ -293,7 +293,7 @@ pipeline:
                                             identifier: Compile_React
                                             spec:
                                                 connectorRef: account.DockerDC
-                                                image: react:1.8
+                                                image: python:alpine3.15
                                                 command: |-
                                                     echo "Iniciando compilación React..."
 
