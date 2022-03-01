@@ -25,53 +25,48 @@ pipeline:
                                 identifier: git_clone
                                 spec:
                                     connectorRef: account.DockerDC
-                                    image: alpine/git:latest
-                                    command: |-
-                                        echo "Borrando temporales..."
-
-                                        #rm -r /harness/*
-                                        pwd
-                                        ls
-
-                                        echo "Descargando proyecto correspondiente..."
-
-
-                                        git clone https://github.com/damian-curiel/GKE_demo_latam.git
+                                    image: curlimages/curl:latest
+                                    command: |
+                                        #!/bin/bash
                                         cd GKE_demo_latam
 
+                                        echo "Consultando API latam...."
+                                        variables_ambiente=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json)
+                                        echo $variables_ambiente
 
-                                        echo "Proyecto descargado:"
-                                        pwd
-                                        ls -a
-                          - step:
-                                type: Run
-                                name: compile
-                                identifier: compile
-                                spec:
-                                    connectorRef: account.DockerDC
-                                    image: maven:3-openjdk-8
-                                    command: |-
-                                        echo "Listing Directory and files"
-                                        cd GKE_demo_latam
-                                        pwd
-                                        ls -ltra
+                                        puerto=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json | jq -r '.port')
+                                        echo $puerto
 
-                                        echo "Starting Build"
 
-                                        mvn -B -DskipTests clean package
+                                        echo "Generando archivo App.yaml..."
+                                        echo "apiVersion: apps/v1
+                                        kind: Deployment
+                                        metadata:
+                                          name: pacifico-app
+                                          labels:
+                                            app: pacifico
+                                        spec:
+                                          selector:
+                                            matchLabels:
+                                              app: pacifico
+                                          template:
+                                            metadata:
+                                              labels:
+                                                app: pacifico
+                                            spec:
+                                              containers:
+                                              - image: {{.Values.image}}
+                                                name: pacifico
+                                                ports:
+                                                - containerPort: {{.Values.port}}" > app.yaml
+                                        cat app.yaml
 
-                                        echo "Build Finished"
-                                when:
-                                    stageStatus: Failure
-                                failureStrategies: []
-                          - step:
-                                type: BuildAndPushDockerRegistry
-                                name: push
-                                identifier: push
-                                spec:
-                                    connectorRef: account.DockerDC
-                                    repo: fcuriel/pacifico
-                                    tags:
-                                        - <+pipeline.sequenceId>
-                                    dockerfile: /harness/GKE_demo_latam/Dockerfile
-                                    context: /harness/GKE_demo_latam/
+
+                                        echo "Generando archivo values.yaml..."
+                                        echo "name: harness-example
+                                        replicas: 1
+
+                                        image: <+artifact.image>
+                                        port: $puerto" > values.yaml
+                                        cat values.yaml
+                                    shell: Bash
