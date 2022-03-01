@@ -6,18 +6,16 @@ inputSet:
   pipeline:
     identifier: "test_pipeline"
     stages:
-    - parallel:
-      - stage:
-          identifier: "Build_Kubernetes"
-          type: "CI"
-          spec:
-            execution:
-              steps:
-              - parallel:
-                - step:
-                    identifier: "Compile_Java"
-                    type: "Run"
-                    spec:
-                      command: "echo \"Listing Directory and files\"\ncd GKE_demo_latam\n\
-                        pwd\nls -ltra\n\necho \"Starting Build\"\n\nmvn -B -DskipTests\
-                        \ clean package\n\necho \"Build Finished\""
+    - stage:
+        identifier: "Build_Kubernetes"
+        type: "CI"
+        spec:
+          execution:
+            steps:
+            - step:
+                identifier: "Compile_Java"
+                type: "Run"
+                spec:
+                  command: "echo \"Listing Directory and files\"\npwd\nls -ltra\n\n\
+                    echo \"Starting Build\"\n\nmvn -B -DskipTests clean package\n\n\
+                    echo \"Build Finished\""
