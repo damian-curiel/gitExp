@@ -234,28 +234,40 @@ pipeline:
                                               git status
                                               git commit -m "Add harness app.yaml and values.yaml file auto-generated"
                                               git push
-                                - step:
-                                      type: Run
-                                      name: Compile Java
-                                      identifier: Compile_Java
-                                      spec:
-                                          connectorRef: account.DockerDC
-                                          image: maven:3-openjdk-8
-                                          command: |-
-                                              echo "Listing Directory and files"
-                                              cd GKE_demo_latam
-                                              pwd
-                                              ls -ltra
+                                - parallel:
+                                      - step:
+                                            type: Run
+                                            name: Compile Java
+                                            identifier: Compile_Java
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: maven:3-openjdk-8
+                                                command: |-
+                                                    echo "Listing Directory and files"
+                                                    cd GKE_demo_latam
+                                                    pwd
+                                                    ls -ltra
 
-                                              echo "Starting Build"
+                                                    echo "Starting Build"
 
-                                              mvn -B -DskipTests clean package
+                                                    mvn -B -DskipTests clean package
 
-                                              echo "Build Finished"
-                                      when:
-                                          stageStatus: Success
-                                          condition: <+execution.steps.isJava.output.outputVariables.language> == "java"
-                                      failureStrategies: []
+                                                    echo "Build Finished"
+                                            when:
+                                                stageStatus: Success
+                                                condition: <+execution.steps.isJava.output.outputVariables.language> == "java"
+                                            failureStrategies: []
+                                      - step:
+                                            type: Run
+                                            name: Compile Python
+                                            identifier: Compile_Python
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: python:alpine3.15
+                                                command: |-
+                                                    echo "Iniciando compilación python"
+
+                                                    python -m py_compile script.py
                                 - step:
                                       type: BuildAndPushDockerRegistry
                                       name: Build and push image
