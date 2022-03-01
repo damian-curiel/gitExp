@@ -488,6 +488,8 @@ pipeline:
                                         echo "removing files"
                                         cd GKE_demo_latam
 
+                                        git config user.email "damian.curiel@harness.io"
+                                        git config user.name "damian-curiel"
                                         git rm -f app.yaml
                                         git rm -f values.yaml
                                         git status
