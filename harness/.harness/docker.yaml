@@ -28,7 +28,6 @@ pipeline:
                                     image: curlimages/curl:latest
                                     command: |
                                         #!/bin/bash
-                                        cd GKE_demo_latam
 
                                         echo "Consultando API latam...."
                                         variables_ambiente=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json)
