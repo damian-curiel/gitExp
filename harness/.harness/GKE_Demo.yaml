@@ -268,6 +268,10 @@ pipeline:
                                                     echo "Iniciando compilación python"
 
                                                     python -m py_compile script.py
+                                            when:
+                                                stageStatus: Success
+                                                condition: <+execution.steps.isJava.output.outputVariables.language> == "python"
+                                            failureStrategies: []
                                 - step:
                                       type: BuildAndPushDockerRegistry
                                       name: Build and push image
