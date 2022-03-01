@@ -142,23 +142,69 @@ pipeline:
                                                     port: 8080" > values.yaml
                                       - step:
                                             type: Run
-                                            name: isJava8
+                                            name: isJava
                                             identifier: isJava
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: bash:4.0.44
-                                                command: |-
+                                                command: |
                                                     #!/bin/bash
                                                     cd GKE_demo_latam
+
                                                     salida="false"
+                                                    #Is Python??
+                                                    count=`ls -1 *.py 2>/dev/null | wc -l`
+                                                    if [ $count != 0 ]
+                                                    then 
+                                                    salida="python"
+                                                    echo "Es python: $salida"
+                                                    export language=$salida
+                                                    else
+                                                    echo "No es Python"
+
+                                                    #is Java??
                                                     count=`ls -1 *.java 2>/dev/null | wc -l`
                                                     if [ $count != 0 ]
                                                     then 
                                                     salida="java"
                                                     echo "Es java: $salida"
-                                                    fi 
-                                                    echo $salida
                                                     export language=$salida
+                                                    else
+                                                    echo "No es Java"
+
+                                                    #is NodeJS?
+                                                    count=`ls -1 *.js 2>/dev/null | wc -l`
+                                                    if [ $count != 0 ]
+                                                    then 
+                                                    salida="nodejs"
+                                                    echo "Es NodeJS: $salida"
+                                                    export language=$salida
+                                                    else
+                                                    echo "No es NodeJS"
+
+                                                    #is React?
+                                                    count=`ls -1 *.jsx 2>/dev/null | wc -l`
+                                                    if [ $count != 0 ]
+                                                    then 
+                                                    salida="react"
+                                                    echo "Es react: $salida"
+                                                    export language=$salida
+                                                    else
+                                                    echo "No es react"
+
+                                                    #is Angular?
+                                                    count=`ls -1 *.ts 2>/dev/null | wc -l`
+                                                    if [ $count != 0 ]
+                                                    then 
+                                                    salida="angular"
+                                                    echo "Es angular: $salida"
+                                                    export language=$salida
+                                                    echo "No es ningún tipo de lenguaje conocido"
+                                                    fi
+                                                    fi
+                                                    fi
+                                                    fi
+                                                    fi
                                                 outputVariables:
                                                     - name: language
                                                 shell: Bash
@@ -178,14 +224,6 @@ pipeline:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
                                                 command: echo "es React"
-                                      - step:
-                                            type: Run
-                                            name: isJava11
-                                            identifier: isRuby
-                                            spec:
-                                                connectorRef: account.DockerDC
-                                                image: nginx:alpine
-                                                command: echo "Es Java 11"
                                 - step:
                                       type: Run
                                       name: git commit yaml
