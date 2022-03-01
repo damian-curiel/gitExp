@@ -365,6 +365,19 @@ pipeline:
                                                     repoName: GKE_demo_latam
                                                     branch: master
                                             skipResourceVersioning: false
+                                  - manifest:
+                                        identifier: valueas
+                                        type: Values
+                                        spec:
+                                            store:
+                                                type: Github
+                                                spec:
+                                                    connectorRef: account.githubdamianaccount
+                                                    gitFetchType: Branch
+                                                    paths:
+                                                        - values.yaml
+                                                    repoName: GKE_demo_latam
+                                                    branch: master
                   infrastructure:
                       environmentRef: Desarrollo
                       infrastructureDefinition:
