@@ -68,4 +68,7 @@ pipeline:
                                         image: <+artifact.image>
                                         port: $puerto" > values.yaml
                                         cat values.yaml
+
+                                        pwd
+                                        ls -a
                                     shell: Sh
