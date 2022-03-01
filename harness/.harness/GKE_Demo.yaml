@@ -32,11 +32,12 @@ pipeline:
                                 spec:
                                     connectorRef: account.DockerDC
                                     image: bash:devel-alpine3.15
-                                    command: |
+                                    command: |-
                                         echo "Detectando tecnología..."
                                         echo "Propiedades de trigger:  "
 
                                         echo "Repo de payload: <+trigger.payload.repository.name>"
+                                        echo "Lenguaje de payload: <+trigger.payload.repository.language>"
                                         echo "tipo: <+trigger.type>"
                                         echo "Evento: <+trigger.event>"
                                         echo "Rama destino: <+trigger.targetBranch>"
@@ -51,6 +52,8 @@ pipeline:
 
                                         tech=<+trigger.payload.repository.name>
                                         export technology=${tech%%_*}
+
+                                        sleep 30
                                     outputVariables:
                                         - name: technology
                                     shell: Bash
