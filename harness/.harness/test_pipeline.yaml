@@ -19,7 +19,10 @@ pipeline:
               spec:
                   cloneCodebase: true
                   infrastructure:
-                      useFromStage: Technology
+                      type: KubernetesDirect
+                      spec:
+                          connectorRef: account.LATAM_SE
+                          namespace: harness-delegate
                   execution:
                       steps:
                           - step:
