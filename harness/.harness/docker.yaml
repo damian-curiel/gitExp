@@ -77,7 +77,7 @@ pipeline:
                                         echo "name: harness-example
                                         replicas: 1
 
-                                        image: <+artifact.image>
+                                        image: GKE-<+pipeline.sequenceId>
                                         port: $puerto" > values.yaml
                                         cat values.yaml
 
