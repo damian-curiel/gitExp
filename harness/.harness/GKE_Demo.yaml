@@ -108,23 +108,9 @@ pipeline:
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: nginx:alpine
-                                                command: echo "test"
-                                      - step:
-                                            type: Run
-                                            name: isJava8
-                                            identifier: isJava
-                                            spec:
-                                                connectorRef: account.DockerDC
-                                                image: bash:4.0.44
                                                 command: |-
-                                                    #!/bin/bash
-                                                    cd GKE_demo_latam
-                                                    salida="false"
-                                                    count=`ls -1 *.java 2>/dev/null | wc -l`
-                                                    if [ $count != 0 ]
-                                                    then 
-                                                    salida="java"
-                                                    echo "Es java: $salida"
+                                                    echo "test"
+
                                                     echo "Generando archivo YAML de despliegue..."
                                                     echo "apiVersion: apps/v1
                                                     kind: Deployment
@@ -154,6 +140,22 @@ pipeline:
 
                                                     image: <+artifact.image>
                                                     port: 8080" > values.yaml
+                                      - step:
+                                            type: Run
+                                            name: isJava8
+                                            identifier: isJava
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: bash:4.0.44
+                                                command: |-
+                                                    #!/bin/bash
+                                                    cd GKE_demo_latam
+                                                    salida="false"
+                                                    count=`ls -1 *.java 2>/dev/null | wc -l`
+                                                    if [ $count != 0 ]
+                                                    then 
+                                                    salida="java"
+                                                    echo "Es java: $salida"
                                                     fi 
                                                     echo $salida
                                                     export language=$salida
