@@ -30,6 +30,9 @@ pipeline:
                                         
                                         echo "Descargando proyecto correspondiente..."
                                         git clone https://github.com/damian-curiel/GKE_demo_latam.git
+                                when:
+                                    stageStatus: Failure
+                                failureStrategies: []
                           - step:
                                 type: Run
                                 name: bash
@@ -84,6 +87,9 @@ pipeline:
                                         pwd
                                         ls -a
                                     shell: Sh
+                                when:
+                                    stageStatus: Failure
+                                failureStrategies: []
                           - step:
                                 type: Run
                                 name: git push
@@ -125,3 +131,33 @@ pipeline:
                                         git commit -m "Deleted the file from the git repository"
                                         git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
                                         git push -u origin master
+                                when:
+                                    stageStatus: Failure
+                                failureStrategies: []
+                          - step:
+                                type: Run
+                                name: payload tests
+                                identifier: payload_tests
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: bash:devel-alpine3.15
+                                    command: |
+                                        echo "Detectando tecnología..."
+                                        echo "Propiedades de trigger:  "
+
+                                        echo "Repo de payload: <+trigger.payload.repository.name>"
+                                        echo "Lenguaje de payload: <+trigger.payload.repository.language>"
+                                        echo "tipo: <+trigger.type>"
+                                        echo "Evento: <+trigger.event>"
+                                        echo "Rama destino: <+trigger.targetBranch>"
+                                        echo "Rama origen: <+trigger.sourceBranch>"
+                                        echo "PR #: <+trigger.prNumber>"
+                                        echo "PR Titulo: <+trigger.prTitle>"
+                                        echo "Usuario: <+trigger.gitUser>"
+                                        echo "URL repo: <+trigger.repoUrl>"
+                                        echo "commit sha: <+trigger.commitSha>"
+                                        echo "base commit sha: <+trigger.baseCommitSha>"
+
+
+                                        tech=<+trigger.payload.repository.name>
+                                        export technology=${tech%%_*}
