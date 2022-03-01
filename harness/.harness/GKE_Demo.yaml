@@ -1,5 +1,5 @@
 pipeline:
-    name: GKE Demo
+    name: Custom Demo flow 1
     identifier: GKE_Demo
     allowStageExecutions: false
     projectIdentifier: Latam_Arilines
