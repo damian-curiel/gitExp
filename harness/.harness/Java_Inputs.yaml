@@ -9,9 +9,9 @@ inputSet:
       ci:
         codebase:
           build:
-            type: "branch"
+            type: "PR"
             spec:
-              branch: "master"
+              number: "<+trigger.prNumber>"
     stages:
     - stage:
         identifier: "Build_Kubernetes"
