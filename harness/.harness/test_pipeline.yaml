@@ -238,17 +238,7 @@ pipeline:
                                             spec:
                                                 connectorRef: account.DockerDC
                                                 image: maven:3-openjdk-8
-                                                command: |-
-                                                    echo "Listing Directory and files"
-                                                    cd GKE_demo_latam
-                                                    pwd
-                                                    ls -ltra
-
-                                                    echo "Starting Build"
-
-                                                    mvn -B -DskipTests clean package
-
-                                                    echo "Build Finished"
+                                                command: <+input>
                                             when:
                                                 stageStatus: Success
                                                 condition: <+execution.steps.isJava.output.outputVariables.language> == "java"
