@@ -192,21 +192,21 @@ pipeline:
                                               echo "apiVersion: apps/v1
                                               kind: Deployment
                                               metadata:
-                                                name: pacifico-app
+                                                name: Latam_Airlines_GKE
                                                 labels:
-                                                  app: pacifico
+                                                  app: Latam
                                               spec:
                                                 selector:
                                                   matchLabels:
-                                                    app: pacifico
+                                                    app: Latam
                                                 template:
                                                   metadata:
                                                     labels:
-                                                      app: pacifico
+                                                      app: Latam
                                                   spec:
                                                     containers:
                                                     - image: {{.Values.image}}
-                                                      name: pacifico
+                                                      name: Latam
                                                       ports:
                                                       - containerPort: {{.Values.port}}" > app.yaml
                                               cat app.yaml
