@@ -21,6 +21,17 @@ pipeline:
                       steps:
                           - step:
                                 type: Run
+                                name: clone
+                                identifier: clone
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: alpine/git:latest
+                                    command: |
+                                        
+                                        echo "Descargando proyecto correspondiente..."
+                                        git clone https://github.com/damian-curiel/GKE_demo_latam.git
+                          - step:
+                                type: Run
                                 name: bash
                                 identifier: bash
                                 spec:
@@ -72,3 +83,20 @@ pipeline:
                                         pwd
                                         ls -a
                                     shell: Sh
+                          - step:
+                                type: Run
+                                name: git push
+                                identifier: git_push
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: alpine/git:latest
+                                    command: |-
+                                        echo "Uploading App.yaml generated..."
+                                        cd GKE_demo_latam
+                                        git config user.email "damian.curiel@harness.io"
+                                        git config user.name "Damian Curiel"
+                                        git add app.yaml
+                                        git add values.yaml
+                                        git status
+                                        git commit -m "Add harness app.yaml and values.yaml file auto-generated"
+                                        git push
