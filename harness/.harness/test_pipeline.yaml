@@ -1,5 +1,5 @@
 pipeline:
-    name: test pipeline
+    name: Custom Demo Flow 2
     identifier: test_pipeline
     allowStageExecutions: false
     projectIdentifier: Latam_Arilines
