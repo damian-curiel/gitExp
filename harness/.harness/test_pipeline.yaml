@@ -191,43 +191,4 @@ pipeline:
                             type: StageRollback
               when:
                   pipelineStatus: Success
-        - stage:
-              name: clean
-              identifier: clean
-              type: CI
-              spec:
-                  cloneCodebase: false
-                  infrastructure:
-                      useFromStage: Technology
-                  execution:
-                      steps:
-                          - step:
-                                type: Run
-                                name: git clone
-                                identifier: git_clone
-                                spec:
-                                    connectorRef: account.DockerDC
-                                    image: alpine/git:latest
-                                    command: |
-                                        echo "Descargando proyecto correspondiente..."
-                                        git clone https://github.com/damian-curiel/GKE_demo_latam.git
-                          - step:
-                                type: Run
-                                name: git remove
-                                identifier: git_remove
-                                spec:
-                                    connectorRef: account.DockerDC
-                                    image: alpine/git:latest
-                                    command: |-
-                                        echo "removing files"
-                                        cd GKE_demo_latam
-
-                                        git config user.email "damian.curiel@harness.io"
-                                        git config user.name "damian-curiel"
-                                        git rm -f app.yaml
-                                        git rm -f values.yaml
-                                        git status
-                                        git commit -m "Deleted the file from the git repository"
-                                        git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
-                                        git push -u origin master
     variables: []
