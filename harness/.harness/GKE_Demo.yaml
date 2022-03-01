@@ -216,7 +216,7 @@ pipeline:
                                               echo "name: harness-example
                                               replicas: 1
 
-                                              image: fcuriel/latam:<+pipeline.sequenceId>
+                                              image: fcuriel/latam:GKE-<+pipeline.sequenceId>
                                               port: $puerto" > values.yaml
                                               cat values.yaml
 
