@@ -111,7 +111,7 @@ pipeline:
                                         git commit -m "Deleted the file from the git repository"
                                         git push -u origin master
                                 when:
-                                    stageStatus: Failure
+                                    stageStatus: Success
                                 failureStrategies: []
                           - step:
                                 type: Run
@@ -124,8 +124,8 @@ pipeline:
                                         echo "removing files"
                                         cd GKE_demo_latam
 
-                                        git rm app.yaml
-                                        git rm values.yaml
+                                        git rm -f app.yaml
+                                        git rm -f values.yaml
                                         git status
                                         git commit -m "Deleted the file from the git repository"
                                         git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
