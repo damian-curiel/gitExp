@@ -232,13 +232,15 @@ pipeline:
                                           command: |-
                                               echo "Uploading App.yaml generated..."
                                               cd GKE_demo_latam
+
                                               git config user.email "damian.curiel@harness.io"
-                                              git config user.name "Damian Curiel"
+                                              git config user.name "damian-curiel"
                                               git add app.yaml
                                               git add values.yaml
                                               git status
                                               git commit -m "Add harness app.yaml and values.yaml file auto-generated"
-                                              git push
+                                              git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
+                                              git push -u origin master
                                 - parallel:
                                       - step:
                                             type: Run
@@ -465,6 +467,33 @@ pipeline:
               when:
                   pipelineStatus: Success
                   condition: <+pipeline.stages.Technology.spec.execution.steps.Determine_Technology_from_trigger.output.outputVariables.technology> == "GKE"
+        - stage:
+              name: clean
+              identifier: clean
+              type: CI
+              spec:
+                  cloneCodebase: false
+                  infrastructure:
+                      useFromStage: Technology
+                  execution:
+                      steps:
+                          - step:
+                                type: Run
+                                name: git remove
+                                identifier: git_remove
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: alpine/git:latest
+                                    command: |-
+                                        echo "removing files"
+                                        cd GKE_demo_latam
+
+                                        git rm -f app.yaml
+                                        git rm -f values.yaml
+                                        git status
+                                        git commit -m "Deleted the file from the git repository"
+                                        git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
+                                        git push -u origin master
     variables:
         - name: technology
           type: String
