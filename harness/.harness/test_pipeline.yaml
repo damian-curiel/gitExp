@@ -258,7 +258,4 @@ pipeline:
                                         git commit -m "Deleted the file from the git repository"
                                         git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
                                         git push -u origin master
-    variables:
-        - name: technology
-          type: String
-          value: ""
+    variables: []
