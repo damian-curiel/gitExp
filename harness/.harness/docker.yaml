@@ -21,8 +21,8 @@ pipeline:
                       steps:
                           - step:
                                 type: Run
-                                name: git clone
-                                identifier: git_clone
+                                name: bash
+                                identifier: bash
                                 spec:
                                     connectorRef: account.DockerDC
                                     image: curlimages/curl:latest
@@ -69,4 +69,4 @@ pipeline:
                                         image: <+artifact.image>
                                         port: $puerto" > values.yaml
                                         cat values.yaml
-                                    shell: Bash
+                                    shell: Sh
