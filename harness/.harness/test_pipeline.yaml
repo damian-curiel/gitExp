@@ -24,30 +24,6 @@ pipeline:
                       steps:
                           - step:
                                 type: Run
-                                name: git Clone
-                                identifier: git_Clone
-                                spec:
-                                    connectorRef: account.DockerDC
-                                    image: alpine/git:latest
-                                    command: |-
-                                        echo "Borrando temporales..."
-
-                                        #rm -r /harness/*
-                                        pwd
-                                        ls
-
-                                        echo "Descargando proyecto correspondiente..."
-
-
-                                        git clone https://github.com/damian-curiel/GKE_demo_latam.git
-                                        cd GKE_demo_latam
-
-
-                                        echo "Proyecto descargado:"
-                                        pwd
-                                        ls -a
-                          - step:
-                                type: Run
                                 name: yaml generation
                                 identifier: yaml_generation
                                 spec:
