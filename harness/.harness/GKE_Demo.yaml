@@ -100,130 +100,83 @@ pipeline:
                                               echo "Proyecto descargado:"
                                               pwd
                                               ls -a
-                                - parallel:
-                                      - step:
-                                            type: Run
-                                            name: isPython
-                                            identifier: test
-                                            spec:
-                                                connectorRef: account.DockerDC
-                                                image: nginx:alpine
-                                                command: |-
-                                                    echo "test"
+                                - step:
+                                      type: Run
+                                      name: which language
+                                      identifier: isJava
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: bash:4.0.44
+                                          command: |
+                                              #!/bin/bash
+                                              cd GKE_demo_latam
 
-                                                    echo "Generando archivo YAML de despliegue..."
-                                                    echo "apiVersion: apps/v1
-                                                    kind: Deployment
-                                                    metadata:
-                                                      name: pacifico-app
-                                                      labels:
-                                                        app: pacifico
-                                                    spec:
-                                                      selector:
-                                                        matchLabels:
-                                                          app: pacifico
-                                                      template:
-                                                        metadata:
-                                                          labels:
-                                                            app: pacifico
-                                                        spec:
-                                                          containers:
-                                                          - image: {{.Values.image}}
-                                                            name: pacifico
-                                                            ports:
-                                                            - containerPort: {{.Values.port}}" > app.yaml
-                                                    cat app.yaml
-                                                    echo "Generando archivo YAML de values..."
-                                                    echo "
-                                                    name: harness-example
-                                                    replicas: 1
+                                              salida="false"
+                                              #Is Python??
+                                              count=`ls -1 *.py 2>/dev/null | wc -l`
+                                              if [ $count != 0 ]
+                                              then 
+                                              salida="python"
+                                              echo "Es python: $salida"
+                                              export language=$salida
+                                              else
+                                              echo "No es Python"
 
-                                                    image: <+artifact.image>
-                                                    port: 8080" > values.yaml
-                                      - step:
-                                            type: Run
-                                            name: isJava
-                                            identifier: isJava
-                                            spec:
-                                                connectorRef: account.DockerDC
-                                                image: bash:4.0.44
-                                                command: |
-                                                    #!/bin/bash
-                                                    cd GKE_demo_latam
+                                              #is NodeJS?
+                                              count=`ls -1 *.js 2>/dev/null | wc -l`
+                                              if [ $count != 0 ]
+                                              then 
+                                              salida="nodejs"
+                                              echo "Es NodeJS: $salida"
+                                              export language=$salida
+                                              else
+                                              echo "No es NodeJS"
 
-                                                    salida="false"
-                                                    #Is Python??
-                                                    count=`ls -1 *.py 2>/dev/null | wc -l`
-                                                    if [ $count != 0 ]
-                                                    then 
-                                                    salida="python"
-                                                    echo "Es python: $salida"
-                                                    export language=$salida
-                                                    else
-                                                    echo "No es Python"
+                                              #is React?
+                                              count=`ls -1 *.jsx 2>/dev/null | wc -l`
+                                              if [ $count != 0 ]
+                                              then 
+                                              salida="react"
+                                              echo "Es react: $salida"
+                                              export language=$salida
+                                              else
+                                              echo "No es React"
 
-                                                    #is Java??
-                                                    count=`ls -1 *.java 2>/dev/null | wc -l`
-                                                    if [ $count != 0 ]
-                                                    then 
-                                                    salida="java"
-                                                    echo "Es java: $salida"
-                                                    export language=$salida
-                                                    else
-                                                    echo "No es Java"
+                                              #is Angular?
+                                              count=`ls -1 *.ts 2>/dev/null | wc -l`
+                                              if [ $count != 0 ]
+                                              then 
+                                              salida="angular"
+                                              echo "Es Angular: $salida"
+                                              export language=$salida
+                                              else
+                                              echo "No es Angular"
 
-                                                    #is NodeJS?
-                                                    count=`ls -1 *.js 2>/dev/null | wc -l`
-                                                    if [ $count != 0 ]
-                                                    then 
-                                                    salida="nodejs"
-                                                    echo "Es NodeJS: $salida"
-                                                    export language=$salida
-                                                    else
-                                                    echo "No es NodeJS"
-
-                                                    #is React?
-                                                    count=`ls -1 *.jsx 2>/dev/null | wc -l`
-                                                    if [ $count != 0 ]
-                                                    then 
-                                                    salida="react"
-                                                    echo "Es react: $salida"
-                                                    export language=$salida
-                                                    else
-                                                    echo "No es react"
-
-                                                    #is Angular?
-                                                    count=`ls -1 *.ts 2>/dev/null | wc -l`
-                                                    if [ $count != 0 ]
-                                                    then 
-                                                    salida="angular"
-                                                    echo "Es angular: $salida"
-                                                    export language=$salida
-                                                    echo "No es ningún tipo de lenguaje conocido"
-                                                    fi
-                                                    fi
-                                                    fi
-                                                    fi
-                                                    fi
-                                                outputVariables:
-                                                    - name: language
-                                                shell: Bash
-                                      - step:
-                                            type: Run
-                                            name: isAngular
-                                            identifier: isNodeJS
-                                            spec:
-                                                connectorRef: account.DockerDC
-                                                image: nginx:alpine
-                                                command: echo "Es Angular"
-                                      - step:
-                                            type: Run
-                                            name: isReact
-                                            identifier: isGo
-                                            spec:
-                                                connectorRef: account.DockerDC
-                                                image: nginx:alpine
-                                                command: echo "es React"
+                                              #is Java??
+                                              count=`ls -1 *.java 2>/dev/null | wc -l`
+                                              if [ $count != 0 ]
+                                              then 
+                                              salida="java"
+                                              echo "Es java: $salida"
+                                              export language=$salida
+                                              else
+                                              echo "No es ningún tipo de lenguaje conocido"
+                                              fi
+                                              fi
+                                              fi
+                                              fi
+                                              fi
+                                          outputVariables:
+                                              - name: language
+                                          shell: Bash
+                                - step:
+                                      type: Run
+                                      name: yaml generation
+                                      identifier: yaml_generation
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          image: curlimages/curl:latest
+                                          command: echo "Consultando API latam...."
                                 - step:
                                       type: Run
                                       name: git commit yaml
