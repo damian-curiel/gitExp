@@ -103,3 +103,10 @@ pipeline:
                                         git commit -m "Add harness app.yaml and values.yaml file auto-generated"
                                         git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
                                         git push -u origin master
+
+
+                                        #clean
+                                        git rm app.yaml
+                                        git rm values.yaml
+                                        git commit -m "Deleted the file from the git repository"
+                                        git push -u origin master
