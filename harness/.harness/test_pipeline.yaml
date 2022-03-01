@@ -31,7 +31,6 @@ pipeline:
                                     image: badouralix/curl-jq:latest
                                     command: |
                                         #!/bin/bash
-                                        cd GKE_demo_latam
 
                                         echo "Consultando API latam...."
                                         variables_ambiente=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json)
@@ -84,7 +83,6 @@ pipeline:
                                     image: alpine/git:latest
                                     command: |-
                                         echo "Uploading App.yaml generated..."
-                                        cd GKE_demo_latam
 
                                         git config user.email "damian.curiel@harness.io"
                                         git config user.name "damian-curiel"
@@ -114,8 +112,6 @@ pipeline:
                                     repo: fcuriel/latam
                                     tags:
                                         - GKE-<+pipeline.sequenceId>
-                                    dockerfile: /harness/GKE_demo_latam/Dockerfile
-                                    context: /harness/GKE_demo_latam/
                                 failureStrategies: []
               when:
                   pipelineStatus: Success
