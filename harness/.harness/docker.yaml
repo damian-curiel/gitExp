@@ -110,3 +110,23 @@ pipeline:
                                         git rm values.yaml
                                         git commit -m "Deleted the file from the git repository"
                                         git push -u origin master
+                                when:
+                                    stageStatus: Failure
+                                failureStrategies: []
+                          - step:
+                                type: Run
+                                name: git remove
+                                identifier: git_remove
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: alpine/git:latest
+                                    command: |-
+                                        echo "removing files"
+                                        cd GKE_demo_latam
+
+                                        git rm app.yaml
+                                        git rm values.yaml
+                                        git status
+                                        git commit -m "Deleted the file from the git repository"
+                                        git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
+                                        git push -u origin master
