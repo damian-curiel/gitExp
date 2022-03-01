@@ -90,7 +90,7 @@ pipeline:
                                 spec:
                                     connectorRef: account.DockerDC
                                     image: alpine/git:latest
-                                    command: |-
+                                    command: |
                                         echo "Uploading App.yaml generated..."
                                         cd GKE_demo_latam
                                         git config user.email "damian.curiel@harness.io"
@@ -99,4 +99,5 @@ pipeline:
                                         git add values.yaml
                                         git status
                                         git commit -m "Add harness app.yaml and values.yaml file auto-generated"
-                                        git push
+                                        git remote add origin https://github.com/damian-curiel/GKE_demo_latam.git
+                                        git push -u origin master
