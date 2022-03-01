@@ -272,6 +272,36 @@ pipeline:
                                                 stageStatus: Success
                                                 condition: <+execution.steps.isJava.output.outputVariables.language> == "python"
                                             failureStrategies: []
+                                      - step:
+                                            type: Run
+                                            name: Compile NodeJS
+                                            identifier: Compile_Nodejs
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: nodejs:2.7
+                                                command: |-
+                                                    echo "Iniciando compilación NodeJS"
+
+                                                    nodejs -compile script.js
+                                            when:
+                                                stageStatus: Success
+                                                condition: <+execution.steps.isJava.output.outputVariables.language> == "nodejs"
+                                            failureStrategies: []
+                                      - step:
+                                            type: Run
+                                            name: Compile React
+                                            identifier: Compile_React
+                                            spec:
+                                                connectorRef: account.DockerDC
+                                                image: react:1.8
+                                                command: |-
+                                                    echo "Iniciando compilación React..."
+
+                                                    python -m py_compile script.py
+                                            when:
+                                                stageStatus: Success
+                                                condition: <+execution.steps.isJava.output.outputVariables.language> == "react"
+                                            failureStrategies: []
                                 - step:
                                       type: BuildAndPushDockerRegistry
                                       name: Build and push image
