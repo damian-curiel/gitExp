@@ -1,0 +1,27 @@
+inputSet:
+  identifier: "Python"
+  name: "Python"
+  orgIdentifier: "default"
+  projectIdentifier: "Latam_Arilines"
+  pipeline:
+    identifier: "test_pipeline"
+    properties:
+      ci:
+        codebase:
+          build:
+            type: "PR"
+            spec:
+              number: "<+trigger.prNumber>"
+    stages:
+    - stage:
+        identifier: "Build_Kubernetes"
+        type: "CI"
+        spec:
+          execution:
+            steps:
+            - step:
+                identifier: "Compile_Java"
+                type: "Run"
+                spec:
+                  command: "echo \"Iniciando compilación python\"\n\npython -m py_compile\
+                    \ script.py"
