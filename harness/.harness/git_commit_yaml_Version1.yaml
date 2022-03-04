@@ -1,0 +1,23 @@
+template:
+    name: git commit yaml
+    identifier: git_commit_yaml
+    versionLabel: Version1
+    type: Step
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    spec:
+        type: Run
+        spec:
+            connectorRef: account.DockerDC
+            image: alpine/git:latest
+            command: |-
+                echo "Uploading App.yaml generated..."
+
+                git config user.email "damian.curiel@harness.io"
+                git config user.name "damian-curiel"
+                git add app.yaml
+                git add values.yaml
+                git status
+                git commit -m "Add harness app.yaml and values.yaml file auto-generated"
+                git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
+                git push -u origin master
