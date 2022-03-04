@@ -23,5 +23,6 @@ inputSet:
                 identifier: "Compile_Java"
                 type: "Run"
                 spec:
+                  image: "python:alpine3.15"
                   command: "echo \"Iniciando compilación python\"\n\npython -m py_compile\
                     \ script.py"
