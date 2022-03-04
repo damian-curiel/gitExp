@@ -23,6 +23,7 @@ inputSet:
                 identifier: "Compile_Java"
                 type: "Run"
                 spec:
+                  image: "maven:3-openjdk-8"
                   command: "echo \"Listing Directory and files\"\npwd\nls -ltra\n\n\
                     echo \"Starting Build\"\n\nmvn -B -DskipTests clean package\n\n\
                     echo \"Build Finished\""
