@@ -101,7 +101,7 @@ pipeline:
                                 identifier: Compile_Java
                                 spec:
                                     connectorRef: account.DockerDC
-                                    image: maven:3-openjdk-8
+                                    image: <+input>
                                     command: <+input>
                                 when:
                                     stageStatus: Success
