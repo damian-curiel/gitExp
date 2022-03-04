@@ -1,5 +1,5 @@
 pipeline:
-    name: Custom Demo Flow 2
+    name: Kubernetes
     identifier: test_pipeline
     allowStageExecutions: false
     projectIdentifier: Latam_Arilines
