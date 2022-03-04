@@ -107,6 +107,24 @@ pipeline:
                                     stageStatus: Success
                                 failureStrategies: []
                           - step:
+                                type: RunTests
+                                name: Test Intelligence
+                                identifier: Test_Intelligence
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: maven:3-openjdk-8
+                                    language: Java
+                                    buildTool: Maven
+                                    args: test
+                                    packages: hello
+                                    runOnlySelectedTests: true
+                                    preCommand: cd tests/src/java-module/
+                                    reports:
+                                        type: JUnit
+                                        spec:
+                                            paths:
+                                                - "**/*.xml"
+                          - step:
                                 type: BuildAndPushDockerRegistry
                                 name: Build and push image
                                 identifier: Build_and_push_image
