@@ -1,5 +1,5 @@
 pipeline:
-    name: Custom Demo flow 1
+    name: AppEngine
     identifier: GKE_Demo
     allowStageExecutions: false
     projectIdentifier: Latam_Arilines
