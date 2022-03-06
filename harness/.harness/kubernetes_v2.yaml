@@ -202,7 +202,7 @@ pipeline:
                                         - name: Summary
                                           value: "Despliegue de aplicación - GKE Latam - Release - <+pipeline.sequenceId> "
                                         - name: Description
-                                          value: "Despliegue iniciado por Harness!! \\\\ Detalles del Despliegue:  \\\\ Pipeline Name: <+pipeline.name> \\\\Lenguaje: <+trigger.payload.repository.language> \\\\ Deployment URL: https://app.harness.io/ng/#/account/Io9SR1H7TtGBq9LVyJVB2w/ci/orgs/default/projects/Latam_Arilines/pipelines/kubernetes_v2/executions/<+pipeline.executionId>/pipeline \\\\ Harness executionId: <+pipeline.executionId> \\\\ Harness sequenceId: <+pipeline.sequenceId>"
+                                          value: "Despliegue iniciado por Harness!! \\\\ Detalles del Despliegue:  \\\\ Pipeline Name: <+pipeline.name> \\\\Lenguaje: Angular \\\\ Deployment URL: https://app.harness.io/ng/#/account/Io9SR1H7TtGBq9LVyJVB2w/ci/orgs/default/projects/Latam_Arilines/pipelines/kubernetes_v2/executions/<+pipeline.executionId>/pipeline \\\\ Harness executionId: <+pipeline.executionId> \\\\ Harness sequenceId: <+pipeline.sequenceId>"
                                 timeout: 1d
                                 failureStrategies: []
                           - step:
