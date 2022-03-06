@@ -64,7 +64,8 @@ template:
                 replicas: 1
 
                 image: nginx:1.14.2
-                port: $puerto" > values.yaml
+                port: $puerto
+                tag: <+pipeline.sequenceId>" > values.yaml
                 cat values.yaml
 
                 pwd
