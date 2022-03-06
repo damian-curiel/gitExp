@@ -1,0 +1,29 @@
+inputSet:
+  identifier: "React"
+  name: "React"
+  orgIdentifier: "default"
+  projectIdentifier: "Latam_Arilines"
+  pipeline:
+    identifier: "test_pipeline"
+    properties:
+      ci:
+        codebase:
+          build:
+            type: "PR"
+            spec:
+              number: "<+trigger.prNumber>"
+    stages:
+    - stage:
+        identifier: "Build_Kubernetes"
+        type: "CI"
+        spec:
+          execution:
+            steps:
+            - step:
+                identifier: "Compile_Java"
+                type: "Run"
+                spec:
+                  image: "reploy/reactjs:latest"
+                  command: "#Contenedor para ejecutar conandos previos al push de\
+                    \ la imagen\n\nnpx-create -react app\n\nnpx create-react-app latam_demo\n\
+                    \nnpm start\n\nnpm  run-script build\n"
