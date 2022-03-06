@@ -216,8 +216,6 @@ pipeline:
                                     fields:
                                         - name: Comment
                                           value: Se ha iniciado el proceso de despliegue por harness
-                                    delegateSelectors:
-                                        - harness-prod
                                 timeout: 1d
                                 failureStrategies: []
                           - step:
@@ -240,8 +238,6 @@ pipeline:
                                     fields:
                                         - name: Comment
                                           value: Despliegue completoado exitosamente en ambiente DEV
-                                    delegateSelectors:
-                                        - harness-prod
                                 timeout: 1d
                                 failureStrategies: []
                       rollbackSteps:
