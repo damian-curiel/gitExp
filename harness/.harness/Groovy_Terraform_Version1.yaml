@@ -1,0 +1,74 @@
+template:
+    name: Groovy_Terraform
+    identifier: Groovy_Terraform
+    versionLabel: Version1
+    type: Step
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    spec:
+        type: Run
+        spec:
+            connectorRef: account.DockerDC
+            image: bash:4.0.44
+            command: |
+                #!/bin/bash
+                cd GKE_demo_latam
+
+                salida="false"
+                #Is Python??
+                count=`ls -1 *.py 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then 
+                salida="python"
+                echo "Es python: $salida"
+                export language=$salida
+                else
+                echo "No es Python"
+
+                #is NodeJS?
+                count=`ls -1 *.js 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then 
+                salida="nodejs"
+                echo "Es NodeJS: $salida"
+                export language=$salida
+                else
+                echo "No es NodeJS"
+
+                #is React?
+                count=`ls -1 *.jsx 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then 
+                salida="react"
+                echo "Es react: $salida"
+                export language=$salida
+                else
+                echo "No es React"
+
+                #is Angular?
+                count=`ls -1 *.ts 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then 
+                salida="angular"
+                echo "Es Angular: $salida"
+                export language=$salida
+                else
+                echo "No es Angular"
+
+                #is Java??
+                count=`ls -1 *.java 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then 
+                salida="java"
+                echo "Es java: $salida"
+                export language=$salida
+                else
+                echo "No es ningún tipo de lenguaje conocido"
+                fi
+                fi
+                fi
+                fi
+                fi
+            outputVariables:
+                - name: language
+            shell: Bash
