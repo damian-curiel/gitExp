@@ -373,7 +373,7 @@ pipeline:
                   execution:
                       steps:
                           - step:
-                                name: Approval
+                                name: Manual Approval Gate
                                 identifier: approval
                                 type: HarnessApproval
                                 timeout: 1d
@@ -449,6 +449,23 @@ pipeline:
                                                   onTimeout:
                                                       action:
                                                           type: Ignore
+                          - step:
+                                type: JiraUpdate
+                                name: Fin Prod
+                                identifier: Fin_Prod
+                                spec:
+                                    connectorRef: account.JIRADamian
+                                    issueKey: <+pipeline.stages.Deploy_Kubernetes.spec.execution.steps.nuevo_ticket.issue.key>
+                                    transitionTo:
+                                        transitionName: ""
+                                        status: Done
+                                    fields:
+                                        - name: Comment
+                                          value: Despliegue de aplicación GKE completado exitosamente hasta producción por harness!!
+                                    delegateSelectors:
+                                        - harness-prod
+                                timeout: 1d
+                                failureStrategies: []
                       rollbackSteps:
                           - step:
                                 name: Rollback Rollout Deployment
