@@ -97,7 +97,7 @@ pipeline:
                                         git push -u origin master
                           - step:
                                 type: Run
-                                name: Compile Java
+                                name: Compile
                                 identifier: Compile_Java
                                 spec:
                                     connectorRef: account.DockerDC
