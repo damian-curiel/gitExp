@@ -325,7 +325,7 @@ pipeline:
               when:
                   pipelineStatus: Success
         - stage:
-              name: JIRA Approval Gate
+              name: Approval Gate
               identifier: JIRA_Approval_Gate
               description: ""
               type: Approval
@@ -361,6 +361,20 @@ pipeline:
                                     delegateSelectors:
                                         - harness-prod
                                 failureStrategies: []
+                          - step:
+                                type: HarnessApproval
+                                name: Manual Approval
+                                identifier: Manual_Approval
+                                spec:
+                                    approvalMessage: Please review the following information and approve the pipeline progression
+                                    includePipelineExecutionHistory: true
+                                    approvers:
+                                        userGroups:
+                                            - Approvers
+                                        minimumCount: 1
+                                        disallowPipelineExecutor: false
+                                    approverInputs: []
+                                timeout: 1d
                   serviceDependencies: []
               tags: {}
               failureStrategies: []
