@@ -206,12 +206,46 @@ pipeline:
                                 timeout: 1d
                                 failureStrategies: []
                           - step:
+                                type: JiraUpdate
+                                name: inicio dev
+                                identifier: inicio_dev
+                                spec:
+                                    connectorRef: account.JIRADamian
+                                    issueKey: <+pipeline.stages.Deploy_Kubernetes.spec.execution.steps.nuevo_ticket.issue.key>
+                                    transitionTo:
+                                        transitionName: ""
+                                        status: In Progress
+                                    fields:
+                                        - name: Comment
+                                          value: Se ha iniciado el proceso de despliegue por harness
+                                    delegateSelectors:
+                                        - harness-prod
+                                timeout: 1d
+                                failureStrategies: []
+                          - step:
                                 name: Rollout Deployment
                                 identifier: rolloutDeployment
                                 type: K8sRollingDeploy
                                 timeout: 10m
                                 spec:
                                     skipDryRun: false
+                          - step:
+                                type: JiraUpdate
+                                name: fin dev
+                                identifier: fin_dev
+                                spec:
+                                    connectorRef: account.JIRADamian
+                                    issueKey: <+pipeline.stages.Deploy_Kubernetes.spec.execution.steps.nuevo_ticket.issue.key>
+                                    transitionTo:
+                                        transitionName: ""
+                                        status: Under Review
+                                    fields:
+                                        - name: Comment
+                                          value: Despliegue completoado exitosamente en ambiente DEV
+                                    delegateSelectors:
+                                        - harness-prod
+                                timeout: 1d
+                                failureStrategies: []
                       rollbackSteps:
                           - step:
                                 name: Rollback Rollout Deployment
