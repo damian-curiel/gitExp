@@ -193,8 +193,6 @@ pipeline:
                                 name: nuevo ticket
                                 identifier: nuevo_ticket
                                 spec:
-                                    delegateSelectors:
-                                        - harness-prod
                                     connectorRef: account.JIRADamian
                                     projectKey: HD
                                     issueType: Task
