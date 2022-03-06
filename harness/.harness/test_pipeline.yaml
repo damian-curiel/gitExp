@@ -129,7 +129,13 @@ pipeline:
                                                         - values.yaml
                                                     repoName: GKE_demo_latam
                                                     branch: master
-                              artifacts: {}
+                              artifacts:
+                                  primary:
+                                      spec:
+                                          connectorRef: account.DockerDC
+                                          imagePath: fcuriel/latam
+                                          tag: GKE-<+pipeline.sequenceId>
+                                      type: DockerRegistry
                   infrastructure:
                       environmentRef: Desarrollo
                       infrastructureDefinition:
