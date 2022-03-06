@@ -290,6 +290,23 @@ pipeline:
                                 timeout: 10m
                                 spec:
                                     skipDryRun: false
+                          - step:
+                                type: JiraUpdate
+                                name: fin QA
+                                identifier: fin_QA
+                                spec:
+                                    connectorRef: account.JIRADamian
+                                    issueKey: <+pipeline.stages.Deploy_Kubernetes.spec.execution.steps.nuevo_ticket.issue.key>
+                                    transitionTo:
+                                        transitionName: ""
+                                        status: QA Test
+                                    fields:
+                                        - name: Comment
+                                          value: Despliegue completado correctamente en ambiente QA - Inicio de ciclo de pruebas GKE
+                                    delegateSelectors:
+                                        - harness-prod
+                                timeout: 1d
+                                failureStrategies: []
                       rollbackSteps:
                           - step:
                                 name: Rollback Rollout Deployment
@@ -307,6 +324,46 @@ pipeline:
                             type: StageRollback
               when:
                   pipelineStatus: Success
+        - stage:
+              name: JIRA Approval Gate
+              identifier: JIRA_Approval_Gate
+              description: ""
+              type: Approval
+              spec:
+                  execution:
+                      steps:
+                          - step:
+                                name: Jira Approval
+                                identifier: jiraApproval
+                                type: JiraApproval
+                                timeout: 1d
+                                spec:
+                                    approvalCriteria:
+                                        type: KeyValues
+                                        spec:
+                                            matchAnyCondition: true
+                                            conditions:
+                                                - key: Status
+                                                  operator: equals
+                                                  value: Approved
+                                    rejectionCriteria:
+                                        type: KeyValues
+                                        spec:
+                                            matchAnyCondition: true
+                                            conditions:
+                                                - key: Status
+                                                  operator: equals
+                                                  value: Rejected
+                                    connectorRef: account.JIRADamian
+                                    projectKey: HD
+                                    issueType: Task
+                                    issueKey: <+pipeline.stages.Deploy_Kubernetes.spec.execution.steps.nuevo_ticket.issue.key>
+                                    delegateSelectors:
+                                        - harness-prod
+                                failureStrategies: []
+                  serviceDependencies: []
+              tags: {}
+              failureStrategies: []
         - stage:
               name: approval gate
               identifier: approval_gate
