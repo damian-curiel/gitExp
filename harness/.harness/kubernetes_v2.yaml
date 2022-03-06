@@ -163,7 +163,7 @@ pipeline:
               tags: {}
               failureStrategies: []
         - stage:
-              name: Deploy Kubernetes
+              name: Deploy Kubernetes Dev
               identifier: Deploy_Kubernetes
               description: ""
               type: Deployment
