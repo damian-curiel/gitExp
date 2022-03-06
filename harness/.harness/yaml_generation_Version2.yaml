@@ -22,13 +22,27 @@ template:
 
 
                 echo "Generando archivo App.yaml..."
-                echo "apiVersion: apps/v1
-                kind: Deployment
+                echo "apiVersion: v1
+                kind: Service
                 metadata:
-                  name: latam-airlines-gke
+                  name: my-nginx-svc
                   labels:
                     app: latam
                 spec:
+                  type: LoadBalancer
+                  ports:
+                  - port: {{.Values.port}}
+                  selector:
+                    app: latam
+                ---
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: demo-latam-gke
+                  labels:
+                    app: latam
+                spec:
+                  replicas: 3
                   selector:
                     matchLabels:
                       app: latam
@@ -38,8 +52,8 @@ template:
                         app: latam
                     spec:
                       containers:
-                      - image: {{.Values.image}}
-                        name: latam
+                      - name: latam
+                        image: {{.Values.image}}
                         ports:
                         - containerPort: {{.Values.port}}" > app.yaml
                 cat app.yaml
@@ -49,7 +63,7 @@ template:
                 echo "name: harness-example
                 replicas: 1
 
-                image: fcuriel/latam:GKE-<+pipeline.sequenceId>
+                image: nginx:1.14.2
                 port: $puerto" > values.yaml
                 cat values.yaml
 
