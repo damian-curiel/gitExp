@@ -1,0 +1,57 @@
+template:
+    name: yaml generation
+    identifier: yaml_generation
+    versionLabel: Version1
+    type: Step
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    spec:
+        type: Run
+        spec:
+            connectorRef: account.DockerDC
+            image: badouralix/curl-jq:latest
+            command: |
+                #!/bin/bash
+
+                echo "Consultando API latam...."
+                variables_ambiente=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json)
+                echo $variables_ambiente
+
+                puerto=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json | jq -r '.port')
+                echo $puerto
+
+
+                echo "Generando archivo App.yaml..."
+                echo "apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: latam-airlines-gke
+                  labels:
+                    app: latam
+                spec:
+                  selector:
+                    matchLabels:
+                      app: latam
+                  template:
+                    metadata:
+                      labels:
+                        app: latam
+                    spec:
+                      containers:
+                      - image: {{.Values.image}}
+                        name: latam
+                        ports:
+                        - containerPort: {{.Values.port}}" > app.yaml
+                cat app.yaml
+
+
+                echo "Generando archivo values.yaml..."
+                echo "name: harness-example
+                replicas: 1
+
+                image: fcuriel/latam:GKE-<+pipeline.sequenceId>
+                port: $puerto" > values.yaml
+                cat values.yaml
+
+                pwd
+                ls
