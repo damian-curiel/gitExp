@@ -300,6 +300,20 @@ pipeline:
                                     delegateSelectors:
                                         - harness-prod
                                 failureStrategies: []
+                          - step:
+                                type: HarnessApproval
+                                name: manual
+                                identifier: manual
+                                spec:
+                                    approvalMessage: Please review the following information and approve the pipeline progression
+                                    includePipelineExecutionHistory: true
+                                    approvers:
+                                        userGroups:
+                                            - Approvers
+                                        minimumCount: 1
+                                        disallowPipelineExecutor: false
+                                    approverInputs: []
+                                timeout: 1d
                   serviceDependencies: []
               tags: {}
               failureStrategies: []
