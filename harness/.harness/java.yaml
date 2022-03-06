@@ -1,0 +1,29 @@
+inputSet:
+  identifier: "java"
+  name: "java"
+  orgIdentifier: "default"
+  projectIdentifier: "Latam_Arilines"
+  pipeline:
+    identifier: "kubernetes_v2"
+    properties:
+      ci:
+        codebase:
+          build:
+            type: "PR"
+            spec:
+              number: "<+trigger.prNumber>"
+    stages:
+    - stage:
+        identifier: "Build_Kubernetes"
+        type: "CI"
+        spec:
+          execution:
+            steps:
+            - step:
+                identifier: "Compile_Java"
+                type: "Run"
+                spec:
+                  image: "maven:3-openjdk-8"
+                  command: "echo \"Listing Directory and files\"\npwd\nls -ltra\n\n\
+                    echo \"Starting Build\"\n\nmvn -B -DskipTests clean package\n\n\
+                    echo \"Build Finished\""
