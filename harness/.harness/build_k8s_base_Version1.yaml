@@ -1,0 +1,129 @@
+template:
+    name: build k8s base
+    identifier: build_k8s_base
+    versionLabel: Version1
+    type: Stage
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    spec:
+        type: CI
+        spec:
+            cloneCodebase: true
+            infrastructure:
+                type: KubernetesDirect
+                spec:
+                    connectorRef: account.LATAM_SE
+                    namespace: harness-delegate
+            execution:
+                steps:
+                    - step:
+                          type: Run
+                          name: yaml generation
+                          identifier: yaml_generation
+                          spec:
+                              connectorRef: account.DockerDC
+                              image: badouralix/curl-jq:latest
+                              command: |
+                                  #!/bin/bash
+
+                                  echo "Consultando API latam...."
+                                  variables_ambiente=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json)
+                                  echo $variables_ambiente
+
+                                  puerto=$(curl -H "Content-Type: application/json" https://sales-209522-default-rtdb.firebaseio.com/environment/dev.json | jq -r '.port')
+                                  echo $puerto
+
+
+                                  echo "Generando archivo App.yaml..."
+                                  echo "apiVersion: apps/v1
+                                  kind: Deployment
+                                  metadata:
+                                    name: latam-airlines-gke
+                                    labels:
+                                      app: latam
+                                  spec:
+                                    selector:
+                                      matchLabels:
+                                        app: latam
+                                    template:
+                                      metadata:
+                                        labels:
+                                          app: latam
+                                      spec:
+                                        containers:
+                                        - image: {{.Values.image}}
+                                          name: latam
+                                          ports:
+                                          - containerPort: {{.Values.port}}" > app.yaml
+                                  cat app.yaml
+
+
+                                  echo "Generando archivo values.yaml..."
+                                  echo "name: harness-example
+                                  replicas: 1
+
+                                  image: fcuriel/latam:GKE-<+pipeline.sequenceId>
+                                  port: $puerto" > values.yaml
+                                  cat values.yaml
+
+                                  pwd
+                                  ls
+                    - step:
+                          type: Run
+                          name: git commit yaml
+                          identifier: git_commit_yaml
+                          spec:
+                              connectorRef: account.DockerDC
+                              image: alpine/git:latest
+                              command: |-
+                                  echo "Uploading App.yaml generated..."
+
+                                  git config user.email "damian.curiel@harness.io"
+                                  git config user.name "damian-curiel"
+                                  git add app.yaml
+                                  git add values.yaml
+                                  git status
+                                  git commit -m "Add harness app.yaml and values.yaml file auto-generated"
+                                  git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
+                                  git push -u origin master
+                    - step:
+                          type: Run
+                          name: Compile Java
+                          identifier: Compile_Java
+                          spec:
+                              connectorRef: account.DockerDC
+                              image: <+input>
+                              command: <+input>
+                          when:
+                              stageStatus: Success
+                          failureStrategies: []
+                    - step:
+                          type: RunTests
+                          name: Test Intelligence
+                          identifier: Test_Intelligence
+                          spec:
+                              connectorRef: account.DockerDC
+                              image: maven:3-openjdk-8
+                              language: Java
+                              buildTool: Maven
+                              args: test
+                              packages: hello
+                              runOnlySelectedTests: true
+                              preCommand: cd tests/src/java-module/
+                              reports:
+                                  type: JUnit
+                                  spec:
+                                      paths:
+                                          - "**/*.xml"
+                    - step:
+                          type: BuildAndPushDockerRegistry
+                          name: Build and push image
+                          identifier: Build_and_push_image
+                          spec:
+                              connectorRef: account.DockerDC
+                              repo: fcuriel/latam
+                              tags:
+                                  - GKE-<+pipeline.sequenceId>
+                          failureStrategies: []
+        when:
+            pipelineStatus: Success
