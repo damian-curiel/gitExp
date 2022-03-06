@@ -5,6 +5,13 @@ inputSet:
   projectIdentifier: "Latam_Arilines"
   pipeline:
     identifier: "kubernetes_v2"
+    properties:
+      ci:
+        codebase:
+          build:
+            type: "branch"
+            spec:
+              branch: "master"
     stages:
     - stage:
         identifier: "Build_Kubernetes"
