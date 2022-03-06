@@ -89,6 +89,7 @@ pipeline:
 
                                         git config user.email "damian.curiel@harness.io"
                                         git config user.name "damian-curiel"
+                                        git pull origin master
                                         git add app.yaml
                                         git add values.yaml
                                         git status
