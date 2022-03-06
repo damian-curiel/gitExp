@@ -57,7 +57,7 @@ pipeline:
                                     image: <+input>
                                     command: <+input>
                                 when:
-                                    stageStatus: Success
+                                    stageStatus: Failure
                                 failureStrategies: []
                           - step:
                                 type: BuildAndPushDockerRegistry
