@@ -41,7 +41,17 @@ template:
                       - image: {{.Values.image}}
                         name: latam
                         ports:
-                        - containerPort: {{.Values.port}}" > app.yaml
+                        - containerPort: {{.Values.port}}
+                        readinessProbe:
+                          tcpSocket:
+                            port: {{.Values.port}}
+                          initialDelaySeconds: 60
+                          periodSeconds: 10
+                        livenessProbe:
+                          tcpSocket:
+                            port: {{.Values.port}}
+                          initialDelaySeconds: 120
+                          periodSeconds: 20" > app.yaml
                 cat app.yaml
 
 
