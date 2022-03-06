@@ -67,12 +67,12 @@ pipeline:
                                                 readinessProbe:
                                                   tcpSocket:
                                                     port: {{.Values.port}}
-                                                  initialDelaySeconds: 5
+                                                  initialDelaySeconds: 60
                                                   periodSeconds: 10
                                                 livenessProbe:
                                                   tcpSocket:
                                                     port: {{.Values.port}}
-                                                  initialDelaySeconds: 15
+                                                  initialDelaySeconds: 120
                                                   periodSeconds: 20" > app.yaml
                                         cat app.yaml
 
