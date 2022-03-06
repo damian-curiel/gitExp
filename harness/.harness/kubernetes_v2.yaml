@@ -137,45 +137,6 @@ pipeline:
               when:
                   pipelineStatus: Success
         - stage:
-              name: Test
-              identifier: Test
-              description: ""
-              type: Approval
-              spec:
-                  execution:
-                      steps:
-                          - step:
-                                type: ShellScript
-                                name: Echo
-                                identifier: Echo
-                                spec:
-                                    shell: Bash
-                                    onDelegate: true
-                                    source:
-                                        type: Inline
-                                        spec:
-                                            script: echo "hello"
-                                    environmentVariables: []
-                                    outputVariables: []
-                                    executionTarget: {}
-                                timeout: 10m
-                          - step:
-                                type: HarnessApproval
-                                name: aprroval
-                                identifier: aprroval
-                                spec:
-                                    approvalMessage: Please review the following information and approve the pipeline progression
-                                    includePipelineExecutionHistory: true
-                                    approvers:
-                                        userGroups:
-                                            - Approvers
-                                        minimumCount: 1
-                                        disallowPipelineExecutor: false
-                                    approverInputs: []
-                                timeout: 1d
-                  serviceDependencies: []
-              tags: {}
-        - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
               description: ""
