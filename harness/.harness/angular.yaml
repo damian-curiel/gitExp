@@ -1,0 +1,29 @@
+inputSet:
+  identifier: "angular"
+  name: "Angular"
+  orgIdentifier: "default"
+  projectIdentifier: "Latam_Arilines"
+  pipeline:
+    identifier: "kubernetes_v2"
+    properties:
+      ci:
+        codebase:
+          build:
+            type: "branch"
+            spec:
+              branch: "master"
+    stages:
+    - stage:
+        identifier: "Build_Kubernetes"
+        type: "CI"
+        spec:
+          execution:
+            steps:
+            - step:
+                identifier: "Compile_Java"
+                type: "Run"
+                spec:
+                  image: "angular/ngcontainer:latest"
+                  command: "#Contenedor para ejecutar conandos previos al push de\
+                    \ la imagen+\n\nng new latam_demo_app\n\ncd latam_demo_app\n\n\
+                    ng serve"
