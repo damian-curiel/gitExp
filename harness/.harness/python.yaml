@@ -1,0 +1,28 @@
+inputSet:
+  identifier: "python"
+  name: "Python"
+  orgIdentifier: "default"
+  projectIdentifier: "Latam_Arilines"
+  pipeline:
+    identifier: "kubernetes_v2"
+    properties:
+      ci:
+        codebase:
+          build:
+            type: "branch"
+            spec:
+              branch: "master"
+    stages:
+    - stage:
+        identifier: "Build_Kubernetes"
+        type: "CI"
+        spec:
+          execution:
+            steps:
+            - step:
+                identifier: "Compile_Java"
+                type: "Run"
+                spec:
+                  image: "python:alpine3.15"
+                  command: "echo \"Iniciando compilación python\"\n\npython -m py_compile\
+                    \ script.py"
