@@ -30,7 +30,6 @@ pipeline:
                                 identifier: yaml_generation
                                 template:
                                     templateRef: yaml_generation
-                                    versionLabel: Version1
                           - step:
                                 type: Run
                                 name: git commit yaml
