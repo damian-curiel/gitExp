@@ -238,4 +238,79 @@ pipeline:
                             type: StageRollback
               when:
                   pipelineStatus: Success
-    variables: []
+        - stage:
+              name: Deploy Kubernetes QA
+              identifier: Deploy_Kubernetes_qa
+              description: ""
+              type: Deployment
+              spec:
+                  serviceConfig:
+                      serviceRef: k8s_sample_app
+                      serviceDefinition:
+                          type: Kubernetes
+                          spec:
+                              variables: []
+                              manifests:
+                                  - manifest:
+                                        identifier: Dynamic_GKE
+                                        type: K8sManifest
+                                        spec:
+                                            store:
+                                                type: Github
+                                                spec:
+                                                    connectorRef: account.githubdamianaccount
+                                                    gitFetchType: Branch
+                                                    paths:
+                                                        - app.yaml
+                                                    repoName: GKE_demo_latam
+                                                    branch: master
+                                            skipResourceVersioning: false
+                                  - manifest:
+                                        identifier: valueas
+                                        type: Values
+                                        spec:
+                                            store:
+                                                type: Github
+                                                spec:
+                                                    connectorRef: account.githubdamianaccount
+                                                    gitFetchType: Branch
+                                                    paths:
+                                                        - values.yaml
+                                                    repoName: GKE_demo_latam
+                                                    branch: master
+                              artifacts: {}
+                  infrastructure:
+                      environmentRef: Desarrollo
+                      infrastructureDefinition:
+                          type: KubernetesDirect
+                          spec:
+                              connectorRef: account.LATAM_SE
+                              namespace: harness-delegate
+                              releaseName: release-<+INFRA_KEY>
+                      allowSimultaneousDeployments: false
+                  execution:
+                      steps:
+                          - step:
+                                name: Rollout Deployment
+                                identifier: rolloutDeployment
+                                type: K8sRollingDeploy
+                                timeout: 10m
+                                spec:
+                                    skipDryRun: false
+                      rollbackSteps:
+                          - step:
+                                name: Rollback Rollout Deployment
+                                identifier: rollbackRolloutDeployment
+                                type: K8sRollingRollback
+                                timeout: 10m
+                                spec: {}
+                  serviceDependencies: []
+              tags: {}
+              failureStrategies:
+                  - onFailure:
+                        errors:
+                            - AllErrors
+                        action:
+                            type: StageRollback
+              when:
+                  pipelineStatus: Success
