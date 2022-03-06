@@ -25,5 +25,5 @@ inputSet:
                 spec:
                   image: "angular/ngcontainer:latest"
                   command: "#Contenedor para ejecutar conandos previos al push de\
-                    \ la imagen+\n\nng new latam_demo_app\n\ncd latam_demo_app\n\n\
-                    ng serve"
+                    \ la imagen+\n\necho \"running: ng new latam_demo_app\"\n\necho\
+                    \ \"running: cd latam_demo_app\"\n\necho \"running: ng serve\""
