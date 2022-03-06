@@ -124,7 +124,7 @@ pipeline:
                           type: KubernetesDirect
                           spec:
                               connectorRef: account.LATAM_SE
-                              namespace: harness-delegate
+                              namespace: dev
                               releaseName: release-<+INFRA_KEY>
                       allowSimultaneousDeployments: false
                   execution:
