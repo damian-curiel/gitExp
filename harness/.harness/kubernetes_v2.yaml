@@ -79,6 +79,12 @@ pipeline:
                                         pwd
                                         ls
                           - step:
+                                name: create yaml
+                                identifier: create_yaml
+                                template:
+                                    templateRef: yaml_generation
+                                    versionLabel: Version2
+                          - step:
                                 type: Run
                                 name: git commit yaml
                                 identifier: git_commit_yaml
