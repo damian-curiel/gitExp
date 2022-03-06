@@ -297,8 +297,6 @@ pipeline:
                                     fields:
                                         - name: Comment
                                           value: Despliegue completado correctamente en ambiente QA - Inicio de ciclo de pruebas GKE
-                                    delegateSelectors:
-                                        - harness-prod
                                 timeout: 1d
                                 failureStrategies: []
                       rollbackSteps:
@@ -444,8 +442,6 @@ pipeline:
                                     fields:
                                         - name: Comment
                                           value: Despliegue de aplicación GKE completado exitosamente hasta producción por harness!!
-                                    delegateSelectors:
-                                        - harness-prod
                                 timeout: 1d
                                 failureStrategies: []
                       rollbackSteps:
