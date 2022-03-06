@@ -137,6 +137,31 @@ pipeline:
               when:
                   pipelineStatus: Success
         - stage:
+              name: Test
+              identifier: Test
+              description: ""
+              type: Approval
+              spec:
+                  execution:
+                      steps:
+                          - step:
+                                type: ShellScript
+                                name: Echo
+                                identifier: Echo
+                                spec:
+                                    shell: Bash
+                                    onDelegate: true
+                                    source:
+                                        type: Inline
+                                        spec:
+                                            script: echo "hello"
+                                    environmentVariables: []
+                                    outputVariables: []
+                                    executionTarget: {}
+                                timeout: 10m
+                  serviceDependencies: []
+              tags: {}
+        - stage:
               name: Deploy Kubernetes
               identifier: Deploy_Kubernetes
               description: ""
