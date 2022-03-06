@@ -42,12 +42,12 @@ pipeline:
 
                                         git config user.email "damian.curiel@harness.io"
                                         git config user.name "damian-curiel"
-                                        git add app.yaml
-                                        git add values.yaml
+                                        git add -f app.yaml
+                                        git add -f values.yaml
                                         git status
                                         git commit -m "Add harness app.yaml and values.yaml file auto-generated"
                                         git remote set-url origin https://<+secrets.getValue("account.git_dc_pat")>@github.com/damian-curiel/GKE_demo_latam.git
-                                        git push -u origin master
+                                        git push -u origin master --force
                           - step:
                                 type: Run
                                 name: Compile
