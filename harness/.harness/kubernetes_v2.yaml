@@ -232,6 +232,13 @@ pipeline:
                   execution:
                       steps:
                           - step:
+                                type: K8sRollingDeploy
+                                name: Rolling Deployment
+                                identifier: Rolling_Deployment
+                                spec:
+                                    skipDryRun: false
+                                timeout: 10m
+                          - step:
                                 type: JiraUpdate
                                 name: fin QA
                                 identifier: fin_QA
