@@ -223,24 +223,6 @@ pipeline:
                   serviceConfig:
                       useFromStage:
                           stage: Deploy_Kubernetes
-                      stageOverrides:
-                          artifacts:
-                              sidecars: []
-                          manifests:
-                              - manifest:
-                                    identifier: values
-                                    type: Values
-                                    spec:
-                                        store:
-                                            type: Github
-                                            spec:
-                                                connectorRef: account.githubdamianaccount
-                                                gitFetchType: Branch
-                                                paths:
-                                                    - /setup/values.yaml
-                                                repoName: GKE_demo_latam
-                                                branch: master
-                          variables: []
                   infrastructure:
                       environmentRef: prod
                       infrastructureDefinition:
@@ -312,25 +294,15 @@ pipeline:
                                           type: K8sCanaryDelete
                                           timeout: 10m
                                           spec: {}
-                          - stepGroup:
-                                name: Primary Deployment
-                                identifier: primaryDepoyment
-                                steps:
-                                    - step:
-                                          name: Rolling Deployment
-                                          identifier: rollingDeployment
-                                          type: K8sRollingDeploy
-                                          timeout: 10m
-                                          spec:
-                                              skipDryRun: false
-                                rollbackSteps:
-                                    - step:
-                                          name: Rolling Rollback
-                                          identifier: rollingRollback
-                                          type: K8sRollingRollback
-                                          timeout: 10m
-                                          spec: {}
+                          - step:
+                                name: Rolling Deployment
+                                identifier: rollingDeployment
+                                type: K8sRollingDeploy
+                                timeout: 10m
+                                spec:
+                                    skipDryRun: false
                       rollbackSteps: []
+                  serviceDependencies: []
               tags: {}
               failureStrategies:
                   - onFailure:
