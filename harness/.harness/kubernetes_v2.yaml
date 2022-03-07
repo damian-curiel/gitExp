@@ -221,15 +221,33 @@ pipeline:
               type: Deployment
               spec:
                   serviceConfig:
-                      useFromStage:
-                          stage: Deploy_Kubernetes
+                      serviceRef: gke_latam_prod
+                      serviceDefinition:
+                          type: Kubernetes
+                          spec:
+                              variables: []
+                              manifests:
+                                  - manifest:
+                                        identifier: deployment
+                                        type: K8sManifest
+                                        spec:
+                                            store:
+                                                type: Github
+                                                spec:
+                                                    connectorRef: account.githubdamianaccount
+                                                    gitFetchType: Branch
+                                                    paths:
+                                                        - /setup/deployment.yaml
+                                                    repoName: GKE_demo_latam
+                                                    branch: master
+                                            skipResourceVersioning: false
                   infrastructure:
                       environmentRef: prod
                       infrastructureDefinition:
                           type: KubernetesDirect
                           spec:
                               connectorRef: account.LATAM_SE
-                              namespace: harness-delegate-ng
+                              namespace: prod
                               releaseName: release-<+INFRA_KEY>
                       allowSimultaneousDeployments: false
                   execution:
@@ -249,38 +267,6 @@ pipeline:
                                                   spec:
                                                       count: 1
                                               skipDryRun: false
-                                    - step:
-                                          type: Verify
-                                          name: verify_prod
-                                          identifier: verify_prod
-                                          spec:
-                                              type: Rolling
-                                              spec:
-                                                  sensitivity: MEDIUM
-                                                  duration: 5m
-                                                  deploymentTag: <+serviceConfig.artifacts.primary.tag>
-                                          timeout: 2h
-                                          failureStrategies:
-                                              - onFailure:
-                                                    errors:
-                                                        - Verification
-                                                    action:
-                                                        type: ManualIntervention
-                                                        spec:
-                                                            timeout: 2h
-                                                            onTimeout:
-                                                                action:
-                                                                    type: StageRollback
-                                              - onFailure:
-                                                    errors:
-                                                        - Unknown
-                                                    action:
-                                                        type: ManualIntervention
-                                                        spec:
-                                                            timeout: 2h
-                                                            onTimeout:
-                                                                action:
-                                                                    type: Ignore
                                     - step:
                                           name: Canary Delete
                                           identifier: canaryDelete
