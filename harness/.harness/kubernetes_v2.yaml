@@ -223,6 +223,24 @@ pipeline:
                   serviceConfig:
                       useFromStage:
                           stage: Deploy_Kubernetes
+                      stageOverrides:
+                          artifacts:
+                              sidecars: []
+                          manifests:
+                              - manifest:
+                                    identifier: values
+                                    type: Values
+                                    spec:
+                                        store:
+                                            type: Github
+                                            spec:
+                                                connectorRef: account.githubdamianaccount
+                                                gitFetchType: Branch
+                                                paths:
+                                                    - /setup/values.yaml
+                                                repoName: GKE_demo_latam
+                                                branch: master
+                          variables: []
                   infrastructure:
                       environmentRef: prod
                       infrastructureDefinition:
