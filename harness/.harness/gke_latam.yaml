@@ -1,0 +1,19 @@
+connector:
+  name: gke_latam
+  identifier: gke_latam
+  description:
+  orgIdentifier: default
+  projectIdentifier: Latam_Arilines
+  type: Github
+  spec:
+    url: https://github.com/damian-curiel/
+    validationRepo: GKE_demo_latam
+    authentication:
+      type: Http
+      spec:
+        type: UsernameToken
+        spec:
+          username: damian-curiel
+          tokenRef: account.git_dc_pat
+    executeOnDelegate: false
+    type: Account
