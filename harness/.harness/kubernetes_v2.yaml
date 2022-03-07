@@ -78,6 +78,9 @@ pipeline:
                                         spec:
                                             paths:
                                                 - "**/*.xml"
+                                when:
+                                    stageStatus: Failure
+                                failureStrategies: []
                           - step:
                                 type: BuildAndPushDockerRegistry
                                 name: Build and push image
