@@ -268,6 +268,38 @@ pipeline:
                                                       count: 1
                                               skipDryRun: false
                                     - step:
+                                          type: Verify
+                                          name: verify_prod
+                                          identifier: verify_prod
+                                          spec:
+                                              type: Rolling
+                                              spec:
+                                                  sensitivity: MEDIUM
+                                                  duration: 5m
+                                                  deploymentTag: <+serviceConfig.artifacts.primary.tag>
+                                          timeout: 2h
+                                          failureStrategies:
+                                              - onFailure:
+                                                    errors:
+                                                        - Verification
+                                                    action:
+                                                        type: ManualIntervention
+                                                        spec:
+                                                            timeout: 2h
+                                                            onTimeout:
+                                                                action:
+                                                                    type: StageRollback
+                                              - onFailure:
+                                                    errors:
+                                                        - Unknown
+                                                    action:
+                                                        type: ManualIntervention
+                                                        spec:
+                                                            timeout: 2h
+                                                            onTimeout:
+                                                                action:
+                                                                    type: Ignore
+                                    - step:
                                           name: Canary Delete
                                           identifier: canaryDelete
                                           type: K8sCanaryDelete
@@ -280,13 +312,17 @@ pipeline:
                                           type: K8sCanaryDelete
                                           timeout: 10m
                                           spec: {}
-                          - step:
-                                name: Rolling Deployment
-                                identifier: rollingDeployment
-                                type: K8sRollingDeploy
-                                timeout: 10m
-                                spec:
-                                    skipDryRun: false
+                          - stepGroup:
+                                name: Primary Deployment
+                                identifier: Primary_Deployment
+                                steps:
+                                    - step:
+                                          name: Rolling Deployment
+                                          identifier: rollingDeployment
+                                          type: K8sRollingDeploy
+                                          timeout: 10m
+                                          spec:
+                                              skipDryRun: false
                       rollbackSteps: []
                   serviceDependencies: []
               tags: {}
