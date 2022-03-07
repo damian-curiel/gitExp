@@ -169,12 +169,12 @@ pipeline:
                                 identifier: Primary_Deployment
                                 steps:
                                     - step:
-                                          name: Rollout Deployment
-                                          identifier: rolloutDeployment
                                           type: K8sRollingDeploy
-                                          timeout: 10m
+                                          name: Rolling Deployment
+                                          identifier: Rolling_Deployment
                                           spec:
                                               skipDryRun: false
+                                          timeout: 10m
                           - step:
                                 type: JiraUpdate
                                 name: Fin Prod
