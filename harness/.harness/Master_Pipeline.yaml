@@ -1,0 +1,30 @@
+pipeline:
+    name: Master Pipeline
+    identifier: Master_Pipeline
+    allowStageExecutions: false
+    projectIdentifier: Latam_Arilines
+    orgIdentifier: default
+    tags: {}
+    stages:
+        - stage:
+              name: Get Repo
+              identifier: Get_Repo
+              type: CI
+              spec:
+                  cloneCodebase: false
+                  infrastructure:
+                      type: KubernetesDirect
+                      spec:
+                          connectorRef: account.LATAM_SE
+                          namespace: harness-delegate-ng
+                  execution:
+                      steps:
+                          - step:
+                                type: Run
+                                name: Get Repo Name
+                                identifier: Get_Repo_Name
+                                spec:
+                                    connectorRef: account.DockerDC
+                                    image: curlimages/curl:latest
+                                    shell: Sh
+                                    command: echo "Consultando primera palabra del repo..."
